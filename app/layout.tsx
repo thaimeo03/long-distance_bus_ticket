@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { AntdRegistry } from '@ant-design/nextjs-registry'
 import './globals.css'
+import { ConfigProvider } from 'antd'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -16,10 +17,12 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang='en'>
-      <body className={inter.className}>
-        <AntdRegistry>{children}</AntdRegistry>
-      </body>
-    </html>
+    <ConfigProvider theme={{ token: { colorPrimary: '#ff4d4f', borderRadius: 4 } }}>
+      <html lang='en'>
+        <body className={inter.className}>
+          <AntdRegistry>{children}</AntdRegistry>
+        </body>
+      </html>
+    </ConfigProvider>
   )
 }
