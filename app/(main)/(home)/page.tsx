@@ -1,3 +1,9 @@
+import { Button } from 'antd'
+
 export default function Home() {
-  return <div>Home page</div>
+  return (
+    <main>
+      <Button type='primary'>Home page</Button>
+    </main>
+  )
 }
