@@ -1,8 +1,9 @@
 'use client'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { twMerge } from 'tailwind-merge'
 
-interface IMenuLinkItemProps {
+interface IMenuLinkItemProps extends React.LiHTMLAttributes<HTMLLIElement> {
   children: React.ReactNode
   path: string
 }
@@ -11,12 +12,12 @@ export function Menu({ children }: { children: React.ReactNode }) {
   return <ul className='flex justify-between space-x-7'>{children}</ul>
 }
 
-export function MenuLinkItem({ children, path }: IMenuLinkItemProps) {
+export function MenuLinkItem({ children, path, ...rest }: IMenuLinkItemProps) {
   const pathname = usePathname()
 
   return (
-    <li className='font-semibold'>
-      <Link href={path} className={`p-2 hover:text-primary ${pathname === path ? 'text-primary' : ''}`}>
+    <li className={twMerge('font-semibold', pathname === path ? 'text-primary' : '', rest.className)}>
+      <Link href={path} className={`text-base p-2 hover:text-primary ${pathname === path ? 'text-primary' : ''}`}>
         {children}
       </Link>
     </li>

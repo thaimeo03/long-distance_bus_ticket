@@ -1,6 +1,6 @@
 import { Menu, MenuCustomItem, MenuLinkItem } from '@/components/menu'
 import { ROUTES } from '@/common/constants/routes.constant'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 
 export default function Header() {
   return (
@@ -12,17 +12,17 @@ export default function Header() {
           <MenuLinkItem path={ROUTES.tickets_booking.path}>{ROUTES.tickets_booking.name}</MenuLinkItem>
           <MenuLinkItem path={ROUTES.tickets_cancellation.path}>{ROUTES.tickets_cancellation.name}</MenuLinkItem>
           <MenuCustomItem>
-            <DropdownMenu>
-              <DropdownMenuTrigger className='outline-none font-semibold'>{ROUTES.users.name}</DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem>
-                  <MenuLinkItem path={ROUTES.login.path}>{ROUTES.login.name}</MenuLinkItem>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <MenuLinkItem path={ROUTES.register.path}>{ROUTES.register.name}</MenuLinkItem>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <Popover>
+              <PopoverTrigger className='outline-none font-semibold'>{ROUTES.users.name}</PopoverTrigger>
+              <PopoverContent className='w-fit'>
+                <MenuLinkItem path={ROUTES.login.path} className='text-sm'>
+                  {ROUTES.login.name}
+                </MenuLinkItem>
+                <MenuLinkItem path={ROUTES.register.path} className='text-sm mt-2'>
+                  {ROUTES.register.name}
+                </MenuLinkItem>
+              </PopoverContent>
+            </Popover>
           </MenuCustomItem>
         </Menu>
       </div>
