@@ -12,10 +12,6 @@ const config = {
         '2xl': '1400px'
       }
     },
-    colors: {
-      primary: 'rgba(var(--primary) / <alpha-value>)',
-      secondary: 'rgba(var(--secondary) / <alpha-value>)'
-    },
     extend: {
       colors: {
         border: 'hsl(var(--border))',
