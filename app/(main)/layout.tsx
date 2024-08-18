@@ -1,15 +1,14 @@
-import { Layout } from 'antd'
 import Header from './components/header'
-import Footer from '../components/footer'
+import Footer from '../../components/footer'
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
   return (
-    <Layout style={{ backgroundColor: 'white' }}>
+    <div>
       <Header />
 
-      <div style={{ padding: '0 86px', minHeight: 'calc(100vh - 134px)' }}>{children}</div>
+      <div>{children}</div>
 
-      <Footer />
-    </Layout>
+      {/* <Footer /> */}
+    </div>
   )
 }

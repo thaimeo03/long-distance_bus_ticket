@@ -1,59 +1,31 @@
-import { Header as AntdHeader } from 'antd/es/layout/layout'
-import { Menu } from 'antd'
-import { ItemType, MenuItemType } from 'antd/es/menu/interface'
-import { HomeOutlined, ShopOutlined, UserOutlined, WarningOutlined } from '@ant-design/icons'
-import Link from 'next/link'
+import { Menu, MenuCustomItem, MenuLinkItem } from '@/components/menu'
 import { ROUTES } from '@/common/constants/routes.constant'
-
-const items: ItemType<MenuItemType>[] = [
-  { key: '1', label: <Link href={ROUTES.home.path}>{ROUTES.home.name}</Link>, icon: <HomeOutlined /> },
-  {
-    key: '2',
-    label: <Link href={ROUTES.tickets_booking.path}>{ROUTES.tickets_booking.name}</Link>,
-    icon: <ShopOutlined />
-  },
-  {
-    key: '3',
-    label: <Link href={ROUTES.tickets_cancellation.path}>{ROUTES.tickets_cancellation.name}</Link>,
-    icon: <WarningOutlined />
-  },
-  {
-    key: '4',
-    label: 'Tài khoản',
-    icon: <UserOutlined />,
-    children: [
-      { key: '4-1', label: <Link href='/register'>Đăng ký</Link> },
-      { key: '4-2', label: <Link href='/login'>Đăng nhập</Link> }
-    ]
-  }
-]
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 
 export default function Header() {
   return (
-    <AntdHeader
-      style={{
-        backgroundColor: 'white',
-        display: 'flex',
-        alignItems: 'center',
-        padding: '0'
-      }}
-    >
-      <span style={{ paddingLeft: 86 }}>Logo here</span>
-      <Menu
-        theme='light'
-        mode='horizontal'
-        defaultSelectedKeys={['1']}
-        items={items}
-        style={{
-          justifyContent: 'end',
-          fontSize: 16,
-          fontWeight: 500,
-          gap: 8,
-          flex: 1,
-          minWidth: 0,
-          padding: '0 86px'
-        }}
-      />
-    </AntdHeader>
+    <header className='max-h-[100px] h-[100px] bg-secondary shadow-lg'>
+      <div className='container h-full flex items-center justify-between'>
+        <div className='text-primary'>Logo here</div>
+        <Menu>
+          <MenuLinkItem path={ROUTES.home.path}>{ROUTES.home.name}</MenuLinkItem>
+          <MenuLinkItem path={ROUTES.tickets_booking.path}>{ROUTES.tickets_booking.name}</MenuLinkItem>
+          <MenuLinkItem path={ROUTES.tickets_cancellation.path}>{ROUTES.tickets_cancellation.name}</MenuLinkItem>
+          <MenuCustomItem>
+            <DropdownMenu>
+              <DropdownMenuTrigger className='outline-none font-semibold'>{ROUTES.users.name}</DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem>
+                  <MenuLinkItem path={ROUTES.login.path}>{ROUTES.login.name}</MenuLinkItem>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <MenuLinkItem path={ROUTES.register.path}>{ROUTES.register.name}</MenuLinkItem>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </MenuCustomItem>
+        </Menu>
+      </div>
+    </header>
   )
 }

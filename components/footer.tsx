@@ -1,13 +1,11 @@
-import { Footer as AntdFooter } from 'antd/es/layout/layout'
-
 export default function Footer() {
   return (
-    <AntdFooter
+    <footer
       style={{
         textAlign: 'center'
       }}
     >
       Nothing friendly ©{new Date().getFullYear()} Created by Thai meo
-    </AntdFooter>
+    </footer>
   )
 }
