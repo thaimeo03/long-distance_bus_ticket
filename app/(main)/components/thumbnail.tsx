@@ -8,7 +8,7 @@ export default function Thumbnail() {
   if (pathname !== '/') return null
 
   return (
-    <div className='mt-[100px]'>
+    <div>
       <img
         src='https://s3.rdbuz.com/web/images/vnm/vnmBannerNew.webp'
         alt='thumb'

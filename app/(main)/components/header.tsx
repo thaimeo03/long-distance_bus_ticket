@@ -4,7 +4,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 
 export default function Header() {
   return (
-    <header className='max-h-[100px] h-[100px] bg-secondary shadow-lg fixed top-0 left-0 right-0 z-50'>
+    <header className='max-h-[100px] h-[100px] bg-secondary shadow-lg sticky top-0 left-0 right-0 z-50'>
       <div className='container h-full flex items-center justify-between'>
         <div className='text-primary'>Logo here</div>
         <Menu>

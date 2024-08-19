@@ -14,7 +14,7 @@ export default function BusSearch() {
 
   return (
     <div className='absolute top-1/2 left-1/2 translate-x-[-50%] -translate-y-1/2'>
-      <form className='max-h-[104px] flex items-center justify-between bg-secondary rounded-3xl shadow-md'>
+      <form className='max-h-[104px] flex items-center justify-between bg-white rounded-3xl shadow-md'>
         <div className='relative flex items-center space-x-2 py-6 pl-4 pr-12 border-r border-r-gray-300'>
           <BusIcon className='w-8 h-8 text-muted-foreground' />
           <div className='grid w-full max-w-sm items-center'>
