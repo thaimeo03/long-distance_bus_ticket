@@ -17,7 +17,7 @@ export default function Booking() {
           Thay đổi
         </Button>
       </div>
-      <div className='pl-6 pt-6 grid grid-cols-11'>
+      <div className='p-6 grid grid-cols-11'>
         <div className='col-span-2'>left</div>
         <div className='col-span-9'>
           <BusListSide />
