@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button'
 import { ArrowRight } from 'lucide-react'
 import BusListSide from './components/bus-list-side'
+import BusFilterSide from './components/bus-filter-side'
 
 export default function Booking() {
   return (
@@ -18,7 +19,9 @@ export default function Booking() {
         </Button>
       </div>
       <div className='p-6 grid grid-cols-11'>
-        <div className='col-span-2'>left</div>
+        <div className='col-span-2'>
+          <BusFilterSide />
+        </div>
         <div className='col-span-9'>
           <BusListSide />
         </div>

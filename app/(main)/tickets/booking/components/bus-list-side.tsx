@@ -3,9 +3,8 @@ import SortSide from './sort-side'
 
 export default function BusListSide() {
   return (
-    <div>
+    <div className='ml-3'>
       <SortSide />
-
       <BusList />
     </div>
   )
