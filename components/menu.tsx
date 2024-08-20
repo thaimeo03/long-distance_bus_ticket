@@ -9,7 +9,7 @@ interface IMenuLinkItemProps extends React.LiHTMLAttributes<HTMLLIElement> {
 }
 
 export function Menu({ children }: { children: React.ReactNode }) {
-  return <ul className='flex justify-between space-x-7'>{children}</ul>
+  return <ul className='flex justify-between space-x-7 items-center'>{children}</ul>
 }
 
 export function MenuLinkItem({ children, path, ...rest }: IMenuLinkItemProps) {

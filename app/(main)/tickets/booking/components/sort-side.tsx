@@ -4,20 +4,24 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { useState } from 'react'
 import { twMerge } from 'tailwind-merge'
 import BusSearch from './bus-search'
+import useBusStore from '@/stores/bus.store'
 
 const sortBy = ['Thời gian đến', 'Thời gian đi', 'Giá vé', 'Chỗ trống']
 
 export default function SortSide() {
+  const { busList } = useBusStore()
   const [curSortBy, setCurSortBy] = useState(sortBy[0])
 
   return (
     <div className='flex items-center'>
       <BusSearch />
 
-      <p className='text-sm font-semibold'>
-        29 tìm thấy
-        <span className='text-sm font-normal ml-1'>xe khách</span>
-      </p>
+      {!busList && (
+        <p className='text-sm font-semibold'>
+          0 tìm thấy
+          <span className='text-sm font-normal ml-1'>xe khách</span>
+        </p>
+      )}
 
       <div className='flex items-center ml-auto'>
         <p className='text-sm font-semibold'>Sắp xếp theo:</p>

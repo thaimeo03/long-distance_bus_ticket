@@ -5,7 +5,8 @@ import BusRoute from './components/bus-route'
 export default function Booking() {
   return (
     <div>
-      {/* <BusRoute /> */}
+      <BusRoute />
+
       <div className='p-6 grid grid-cols-11'>
         <div className='col-span-2'>
           <BusFilterSide />

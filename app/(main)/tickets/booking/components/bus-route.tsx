@@ -1,7 +1,13 @@
+'use client'
 import { Button } from '@/components/ui/button'
+import useBusStore from '@/stores/bus.store'
 import { ArrowRight } from 'lucide-react'
 
 export default function BusRoute() {
+  const { busList } = useBusStore()
+
+  if (!busList || busList.length === 0) return null
+
   return (
     <div className='flex space-x-2 px-6 py-4 border-b-2 items-center'>
       <span className='max-w-[150px] line-clamp-1 text-sm font-semibold'>Bến xe Giáp Bát (Hà nội)</span>

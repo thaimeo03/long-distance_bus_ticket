@@ -1,7 +1,9 @@
+'use client'
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
 import { FireExtinguisher, Milk, Plug, WifiHigh } from 'lucide-react'
 import BusServiceTabs from './bus-services-tab'
+import useBusStore from '@/stores/bus.store'
 
 export interface IBusItem {
   companyImage: string
@@ -28,6 +30,10 @@ interface IArrivalInfo {
 }
 
 export default function BusList() {
+  const { busList } = useBusStore()
+
+  // console.log(busList)
+
   return (
     <div className='mt-10 flex flex-col gap-5'>
       {new Array(5).fill(5).map((_, index) => (

@@ -5,7 +5,7 @@ export const ROUTES = {
   },
   users: {
     path: '/users',
-    name: 'Tài khoản'
+    name: 'Thông tin tài khoản'
   },
   login: {
     path: '/login',
@@ -14,6 +14,10 @@ export const ROUTES = {
   register: {
     path: '/register',
     name: 'Đăng ký'
+  },
+  logout: {
+    path: '/login',
+    name: 'Đăng xuất'
   },
   tickets_booking: {
     path: '/tickets/booking',
