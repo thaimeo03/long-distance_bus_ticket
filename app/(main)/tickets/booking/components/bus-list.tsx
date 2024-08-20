@@ -3,6 +3,30 @@ import { Progress } from '@/components/ui/progress'
 import { FireExtinguisher, Milk, Plug, WifiHigh } from 'lucide-react'
 import BusServiceTabs from './bus-services-tab'
 
+export interface IBusItem {
+  companyImage: string
+  companyName: string
+  busName: string
+  busNumber: string
+  departureInfo: IDepartureInfo[]
+  arrivalInfo: IArrivalInfo
+  travelTime: string
+  price: string
+  seatsAvailable: number
+  totalSeat: number
+  busImages: string[]
+}
+
+interface IDepartureInfo {
+  departureTime: string
+  departurePoint: string
+}
+
+interface IArrivalInfo {
+  arrivalTime: string
+  arrivalPoint: string
+}
+
 export default function BusList() {
   return (
     <div className='mt-10 flex flex-col gap-5'>
@@ -12,8 +36,6 @@ export default function BusList() {
     </div>
   )
 }
-
-interface IBusItem {}
 
 export function BusItem() {
   return (
@@ -28,6 +50,10 @@ export function BusItem() {
       <div className='col-span-2'>
         <p className='font-semibold'>Xe Việt Nam</p>
         <span className='block mt-3 text-sm text-foreground'>Limousine</span>
+        <div className='mt-1 flex items-center space-x-1 text-sm'>
+          <span className='font-semibold'>Biển xe:</span>
+          <span className='text-sm text-foreground'>29XL-88888</span>
+        </div>
         <div className='mt-5 flex space-x-1 items-center'>
           <WifiHigh className='w-5 h-5 cursor-pointer text-gray-600' />
           <Milk className='w-5 h-5 cursor-pointer text-gray-600' />
@@ -53,7 +79,7 @@ export function BusItem() {
         <div className='mt-4'>
           <Progress value={33} className='h-2 w-28' />
           <div className='flex mt-3 items-center space-x-1'>
-            <span className='font-semibold'>10</span>
+            <span className='font-semibold'>10/16</span>
             <span className='text-sm text-foreground'> ghế có sẵn</span>
           </div>
         </div>

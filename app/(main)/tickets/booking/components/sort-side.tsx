@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { useState } from 'react'
 import { twMerge } from 'tailwind-merge'
+import BusSearch from './bus-search'
 
 const sortBy = ['Thời gian đến', 'Thời gian đi', 'Giá vé', 'Chỗ trống']
 
@@ -11,12 +12,14 @@ export default function SortSide() {
 
   return (
     <div className='flex items-center'>
+      <BusSearch />
+
       <p className='text-sm font-semibold'>
         29 tìm thấy
         <span className='text-sm font-normal ml-1'>xe khách</span>
       </p>
 
-      <div className='ml-20 flex items-center'>
+      <div className='flex items-center ml-auto'>
         <p className='text-sm font-semibold'>Sắp xếp theo:</p>
         <div className='flex items-center space-x-2 ml-4'>
           {sortBy.map((item, index) => (
