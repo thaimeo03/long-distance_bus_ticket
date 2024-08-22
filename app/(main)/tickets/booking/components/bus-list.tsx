@@ -1,9 +1,9 @@
 'use client'
-import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
 import { FireExtinguisher, Milk, Plug, WifiHigh } from 'lucide-react'
 import BusServiceTabs from './bus-services-tab'
 import useBusStore from '@/stores/bus.store'
+import BookingSheet from './booking-sheet'
 
 export interface IBusItem {
   companyImage: string
@@ -95,7 +95,7 @@ export function BusItem() {
         <div className='flex items-center justify-end'>
           <BusServiceTabs />
 
-          <Button className='bg-red-500 h-8 px-8'>Đặt chỗ</Button>
+          <BookingSheet />
         </div>
       </div>
     </div>
