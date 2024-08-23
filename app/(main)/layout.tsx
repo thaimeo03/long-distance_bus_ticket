@@ -8,7 +8,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
       <Header />
       <Thumbnail />
 
-      <div>{children}</div>
+      <>{children}</>
 
       <Footer />
     </div>
