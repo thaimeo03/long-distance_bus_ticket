@@ -8,7 +8,7 @@ interface UserState {
 }
 
 const useUserStore = create<UserState>((set) => ({
-  isAuth: false,
+  isAuth: true,
   userInfo: null,
   setIsAuth: (isAuth: boolean) => set({ isAuth }),
   setUserInfo: (userInfo: any) => set({ userInfo })

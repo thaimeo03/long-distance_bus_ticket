@@ -17,8 +17,8 @@ export default function Register() {
           <Input id='full_name' type='text' placeholder='Tran Hong Thai' required />
         </div>
         <div className='grid gap-2'>
-          <Label htmlFor='age'>Tuổi</Label>
-          <Input id='age' type='number' placeholder='20' required />
+          <Label htmlFor='phoneNumber'>Số điện thoại</Label>
+          <Input id='phoneNumber' type='text' placeholder='0987654321' required />
         </div>
         <div className='grid gap-2'>
           <Label htmlFor='email'>Email</Label>
