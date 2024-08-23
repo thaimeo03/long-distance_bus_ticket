@@ -23,6 +23,10 @@ export const ROUTES = {
     path: '/tickets/booking',
     name: 'Vé xe khách'
   },
+  tickets_payment: {
+    path: '/tickets/booking/payment',
+    name: 'Thanh toán'
+  },
   tickets_cancellation: {
     path: '/tickets/cancellation',
     name: 'Hủy vé'
