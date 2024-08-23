@@ -9,25 +9,25 @@ export default function Login() {
   return (
     <div>
       <div className='grid gap-2 text-center'>
-        <h1 className='text-3xl font-bold'>Login</h1>
-        <p className='text-balance text-muted-foreground'>Enter your email below to login to your account</p>
+        <h1 className='text-3xl font-bold'>Đăng nhập</h1>
+        <p className='text-balance text-muted-foreground'>Nhập thông tin phía dưới để đăng nhập</p>
       </div>
-      <div className='grid gap-4'>
+      <form className='grid gap-4 mt-3'>
         <div className='grid gap-2'>
           <Label htmlFor='email'>Email</Label>
           <Input id='email' type='email' placeholder='m@example.com' required />
         </div>
         <div className='grid gap-2'>
           <div className='flex items-center'>
-            <Label htmlFor='password'>Password</Label>
+            <Label htmlFor='password'>Mật khẩu</Label>
             <Link href='/forgot-password' className='ml-auto inline-block text-sm underline'>
-              Forgot your password?
+              Quên mật khẩu?
             </Link>
           </div>
           <Input id='password' type='password' required />
         </div>
         <Button type='submit' className='w-full'>
-          Login
+          Đăng nhập
         </Button>
         <Button variant='outline' className='w-full flex space-x-2'>
           <svg xmlns='http://www.w3.org/2000/svg' x='0px' y='0px' width='22' height='22' viewBox='0 0 48 48'>
@@ -48,13 +48,13 @@ export default function Login() {
               d='M43.611,20.083L43.595,20L42,20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571	c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z'
             ></path>
           </svg>
-          <span>Login with Google</span>
+          <span>Đăng nhập Google</span>
         </Button>
-      </div>
+      </form>
       <div className='mt-4 text-center text-sm'>
-        Don&apos;t have an account?{' '}
+        Chưa có tài khoản?{' '}
         <Link href={ROUTES.register.path} className='underline'>
-          Sign up
+          Đăng ký
         </Link>
       </div>
     </div>

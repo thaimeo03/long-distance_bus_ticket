@@ -9,31 +9,42 @@ export default function Register() {
   return (
     <div>
       <div className='grid gap-2 text-center'>
-        <h1 className='text-3xl font-bold'>Register</h1>
-        <p className='text-balance text-muted-foreground'>Enter your email below to login to your account</p>
+        <h1 className='text-3xl font-bold'>Đăng ký</h1>
       </div>
-      <div className='grid gap-4'>
+      <form className='grid gap-4 mt-3'>
+        <div className='grid gap-2'>
+          <Label htmlFor='full_name'>Họ và tên</Label>
+          <Input id='full_name' type='text' placeholder='Tran Hong Thai' required />
+        </div>
+        <div className='grid gap-2'>
+          <Label htmlFor='age'>Tuổi</Label>
+          <Input id='age' type='number' placeholder='20' required />
+        </div>
         <div className='grid gap-2'>
           <Label htmlFor='email'>Email</Label>
           <Input id='email' type='email' placeholder='m@example.com' required />
         </div>
         <div className='grid gap-2'>
           <div className='flex items-center'>
-            <Label htmlFor='password'>Password</Label>
-            <Link href='/forgot-password' className='ml-auto inline-block text-sm underline'>
-              Forgot your password?
-            </Link>
+            <Label htmlFor='password'>Mật khẩu</Label>
           </div>
           <Input id='password' type='password' required />
         </div>
+        <div className='grid gap-2'>
+          <div className='flex items-center'>
+            <Label htmlFor='confirm_password'>Xác nhận mật khẩu</Label>
+          </div>
+          <Input id='confirm_password' type='password' required />
+        </div>
+
         <Button type='submit' className='w-full'>
-          Register
+          Đăng ký
         </Button>
-      </div>
+      </form>
       <div className='mt-4 text-center text-sm'>
-        Don&apos;t have an account?{' '}
+        Đã có tài khoản?{' '}
         <Link href={ROUTES.login.path} className='underline'>
-          Sign up
+          Đăng nhập
         </Link>
       </div>
     </div>
