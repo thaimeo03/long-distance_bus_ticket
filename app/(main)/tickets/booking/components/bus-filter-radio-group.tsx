@@ -1,5 +1,7 @@
+'use client'
 import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import useScheduleStore from '@/stores/schedule.store'
 
 interface IBusFilterRadioGroupProps {
   radioItems: IBusFilterRadioItem[]
@@ -13,15 +15,21 @@ export interface IBusFilterRadioItem {
 }
 
 export function BusFilterRadioGroup({ radioItems, listName, type }: IBusFilterRadioGroupProps) {
+  const { hasSearched } = useScheduleStore()
+
   return (
     <div className='mt-4'>
       <span className='text-sm font-semibold underline'>{listName}</span>
 
-      <RadioGroup className='mt-3 text-gray-600 flex flex-wrap gap-3'>
-        {radioItems.map(({ id, label }, index) => (
-          <BusFilterRadioItem key={`${type}_${index}_${id!}`} id={`${type}_${index}_${id!}`} label={label} />
-        ))}
-      </RadioGroup>
+      {hasSearched && (
+        <RadioGroup className='mt-3 text-gray-600 flex flex-wrap gap-3'>
+          {radioItems.map(({ id, label }, index) => (
+            <BusFilterRadioItem key={`${type}_${index}_${id!}`} id={`${type}_${index}_${id!}`} label={label} />
+          ))}
+        </RadioGroup>
+      )}
+
+      {!hasSearched && <div className='text-xs italic'>{`Vui lòng tìm kiếm xe để tìm ${listName} phù hợp`}</div>}
     </div>
   )
 }

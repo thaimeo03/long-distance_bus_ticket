@@ -1,4 +1,4 @@
-import BusListSide from './components/bus-list-side'
+import ScheduleListSide from './components/schedule-list-side'
 import BusFilterSide from './components/bus-filter-side'
 import BusRoute from './components/bus-route'
 
@@ -12,7 +12,7 @@ export default function Booking() {
           <BusFilterSide />
         </div>
         <div className='col-span-9'>
-          <BusListSide />
+          <ScheduleListSide />
         </div>
       </div>
     </div>

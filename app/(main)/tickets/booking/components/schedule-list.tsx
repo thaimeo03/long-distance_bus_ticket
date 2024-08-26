@@ -2,10 +2,10 @@
 import { Progress } from '@/components/ui/progress'
 import { FireExtinguisher, Milk, Plug, WifiHigh } from 'lucide-react'
 import BusServiceTabs from './bus-services-tab'
-import useBusStore from '@/stores/bus.store'
+import useBusStore from '@/stores/schedule.store'
 import BookingSheet from './booking-sheet'
 
-export interface IBusItem {
+export interface IScheduleItem {
   companyImage: string
   companyName: string
   busName: string
@@ -30,20 +30,20 @@ interface IArrivalInfo {
 }
 
 export default function BusList() {
-  const { busList } = useBusStore()
+  const { scheduleList } = useBusStore()
 
   // console.log(busList)
 
   return (
     <div className='mt-10 flex flex-col gap-5'>
       {new Array(5).fill(5).map((_, index) => (
-        <BusItem key={index} />
+        <IScheduleItem key={index} />
       ))}
     </div>
   )
 }
 
-export function BusItem() {
+export function IScheduleItem() {
   return (
     <div className='relative h-44 grid grid-cols-12 gap-x-2 p-2 border border-gray-300 rounded'>
       <div className='col-span-1'>
