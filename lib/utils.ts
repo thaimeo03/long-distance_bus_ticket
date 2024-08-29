@@ -10,3 +10,8 @@ export function formatTime(timeStamp: string) {
 
   return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false })
 }
+
+export function formatMoney(money: number) {
+  // 155000 -> 155.000
+  return money.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' ₫'
+}

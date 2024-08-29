@@ -8,6 +8,6 @@ export interface IBus {
   name: string
   status: BusStatus
   images: string[]
-  busCompany?: IBusCompany
-  seats?: ISeat[]
+  busCompany: IBusCompany
+  seats: ISeat[]
 }
