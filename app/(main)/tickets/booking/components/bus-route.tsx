@@ -4,9 +4,9 @@ import useBusStore from '@/stores/schedule.store'
 import { ArrowRight } from 'lucide-react'
 
 export default function BusRoute() {
-  const { scheduleList } = useBusStore()
+  const { hasSearched } = useBusStore()
 
-  if (!scheduleList || scheduleList.length === 0) return null
+  if (!hasSearched) return null
 
   return (
     <div className='flex space-x-2 px-6 py-4 border-b-2 items-center'>

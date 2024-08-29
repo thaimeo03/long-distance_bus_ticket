@@ -1,16 +1,16 @@
-import { IScheduleItem } from '@/app/(main)/tickets/booking/components/schedule-list'
+import { IAvailableScheduleResponse } from '@/common/interfaces/schedules.interface'
 import { create } from 'zustand'
 
 interface IScheduleState {
   hasSearched: boolean
-  scheduleList: IScheduleItem[] | null
-  setScheduleList: (scheduleList: IScheduleItem[]) => void
+  scheduleList: IAvailableScheduleResponse[] | null
+  setScheduleList: (scheduleList: IAvailableScheduleResponse[]) => void
 }
 
 const useScheduleStore = create<IScheduleState>((set) => ({
-  hasSearched: true,
+  hasSearched: false,
   scheduleList: null,
-  setScheduleList: (scheduleList: IScheduleItem[]) => set({ scheduleList })
+  setScheduleList: (scheduleList: IAvailableScheduleResponse[]) => set({ scheduleList })
 }))
 
 export default useScheduleStore

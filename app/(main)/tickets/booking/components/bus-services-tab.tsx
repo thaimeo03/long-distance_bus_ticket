@@ -11,13 +11,20 @@ import 'swiper/css/navigation'
 // import required modules
 import { Navigation } from 'swiper/modules'
 import useScheduleStore from '@/stores/schedule.store'
+import { IBus } from '@/common/interfaces/buses.interface'
+import { IRouteStop } from '@/common/interfaces/route-stops.interface'
 
 interface IBusServiceTabsProps {
   name: React.ReactNode
   content: React.ReactNode
 }
 
-export default function BusServiceTabs() {
+interface IBusServiceTabs {
+  bus: IBus
+  routeStops: IRouteStop[]
+}
+
+export default function BusServiceTabs({ bus, routeStops }: IBusServiceTabs) {
   const { hasSearched } = useScheduleStore()
   const [curTabIndex, setCurTabIndex] = useState<number | null>(null)
 
@@ -27,27 +34,11 @@ export default function BusServiceTabs() {
       content: (
         <div className='h-60'>
           <Swiper navigation={true} modules={[Navigation]} className='mySwiper h-full'>
-            <SwiperSlide>
-              <img
-                src='https://vielimousine.com/wp-content/uploads/2021/12/DSC6090.jpg'
-                className='w-full h-full object-contain'
-                alt=''
-              />
-            </SwiperSlide>
-            <SwiperSlide>
-              <img
-                src='https://static.vexere.com/production/images/1702527338553.jpeg'
-                className='w-full h-full object-contain'
-                alt=''
-              />
-            </SwiperSlide>
-            <SwiperSlide>
-              <img
-                src='https://votrechauffeur.ma/assets/images/blog/57005-limou.jpg'
-                className='w-full h-full object-contain'
-                alt=''
-              />
-            </SwiperSlide>
+            {bus.images.map((item, index) => (
+              <SwiperSlide key={index}>
+                <img src={item} className='w-full h-full object-contain' alt={bus.name} />
+              </SwiperSlide>
+            ))}
           </Swiper>
         </div>
       )
@@ -89,7 +80,12 @@ export default function BusServiceTabs() {
             <div className='col-span-2'>
               <p className='text-lg font-bold text-gray-700'>Điểm dừng</p>
               <div className='mt-4 flex gap-5 flex-wrap'>
-                <div className='flex space-x-4'>
+                {routeStops.map((item, index) => (
+                  <div className='flex space-x-4'>
+                    <span className='text-sm'>{item.location}</span>
+                  </div>
+                ))}
+                {/* <div className='flex space-x-4'>
                   <span className='text-sm'>Sân bay Nội Bài</span>
                 </div>
                 <div className='flex space-x-4'>
@@ -97,7 +93,7 @@ export default function BusServiceTabs() {
                 </div>
                 <div className='flex space-x-4'>
                   <span className='text-sm'>43 Nguyễn Quốc Trí</span>
-                </div>
+                </div> */}
               </div>
             </div>
           )}
