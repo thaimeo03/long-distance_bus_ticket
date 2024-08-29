@@ -119,7 +119,7 @@ export function ScheduleItem({ item }: { item: IAvailableScheduleResponse }) {
         <div className='flex items-center justify-end'>
           <BusServiceTabs bus={bus} routeStops={route.routeStops} />
 
-          <BookingSheet />
+          <BookingSheet seats={bus.seats} />
         </div>
       </div>
     </div>

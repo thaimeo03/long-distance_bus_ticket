@@ -81,19 +81,10 @@ export default function BusServiceTabs({ bus, routeStops }: IBusServiceTabs) {
               <p className='text-lg font-bold text-gray-700'>Điểm dừng</p>
               <div className='mt-4 flex gap-5 flex-wrap'>
                 {routeStops.map((item, index) => (
-                  <div className='flex space-x-4'>
+                  <div key={index} className='flex space-x-4'>
                     <span className='text-sm'>{item.location}</span>
                   </div>
                 ))}
-                {/* <div className='flex space-x-4'>
-                  <span className='text-sm'>Sân bay Nội Bài</span>
-                </div>
-                <div className='flex space-x-4'>
-                  <span className='text-sm'>4 Thọ Tháp</span>
-                </div>
-                <div className='flex space-x-4'>
-                  <span className='text-sm'>43 Nguyễn Quốc Trí</span>
-                </div> */}
               </div>
             </div>
           )}

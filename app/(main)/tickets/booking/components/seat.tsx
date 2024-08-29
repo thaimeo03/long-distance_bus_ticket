@@ -1,75 +1,53 @@
 'use client'
+import { ISeat } from '@/common/interfaces/seats.interface'
 import { Button } from '@/components/ui/button'
+import useScheduleStore from '@/stores/schedule.store'
 import { Armchair, ShipWheel } from 'lucide-react'
 import { useState } from 'react'
 import { twMerge } from 'tailwind-merge'
 
-export interface ISeat {
-  value: 0 | 1
-  isAvailable: boolean
-}
-
-export interface ICurBook {
-  i: number
-  j: number
-  seatNum: number
+export interface ISeatProps {
+  seats: ISeat[]
 }
 
 export interface ISeatItemProps {
   seat: ISeat
-  row: ISeat[]
-  i: number
-  j: number
   handleBookSeat?: () => void
 }
 
-const seats: ISeat[][] = [
-  [
-    { value: 1, isAvailable: true },
-    { value: 1, isAvailable: false },
-    { value: 1, isAvailable: false },
-    { value: 1, isAvailable: true },
-    { value: 1, isAvailable: true },
-    { value: 1, isAvailable: true },
-    { value: 1, isAvailable: true }
-  ],
-  [
-    { value: 1, isAvailable: true },
-    { value: 1, isAvailable: false },
-    { value: 1, isAvailable: false },
-    { value: 1, isAvailable: false },
-    { value: 1, isAvailable: true },
-    { value: 1, isAvailable: true },
-    { value: 1, isAvailable: true }
-  ],
-  [
-    { value: 0, isAvailable: false },
-    { value: 1, isAvailable: false },
-    { value: 1, isAvailable: false },
-    { value: 1, isAvailable: true },
-    { value: 1, isAvailable: true },
-    { value: 1, isAvailable: true },
-    { value: 1, isAvailable: true }
-  ],
-  [
-    { value: 0, isAvailable: true },
-    { value: 1, isAvailable: true },
-    { value: 1, isAvailable: true },
-    { value: 1, isAvailable: true },
-    { value: 1, isAvailable: true },
-    { value: 1, isAvailable: true },
-    { value: 1, isAvailable: false }
-  ]
-]
+function transformSeats(seats: ISeat[]): (ISeat | null)[][] {
+  const matrixSeats: (ISeat | null)[][] = []
 
-export function Seat() {
-  const [curSeats, setCurSeats] = useState<ISeat[][]>(seats)
-  const [curBooks, setCurBooks] = useState<ICurBook[]>([])
+  // 4 rows and if seats.length is not divisible by 4, add empty seat before the last row
+  const cols = Math.ceil(seats.length / 4)
+  let rest = seats.length % 4
+  for (let r = 0; r < 4; r++) {
+    const row: (ISeat | null)[] = []
+
+    if (r === 3 && rest !== 0) {
+      while (rest--) {
+        row.push(null)
+      }
+    }
+
+    for (let c = 0; c < cols; c++) {
+      if (r * cols + c < seats.length) {
+        row.push(seats[r * cols + c])
+      }
+    }
+
+    matrixSeats.push(row)
+  }
+
+  return matrixSeats
+}
+
+export function Seat({ seats }: ISeatProps) {
+  const [curSeats, setCurSeats] = useState<ISeat[][]>(transformSeats(seats) as ISeat[][])
+  const [curBooks, setCurBooks] = useState<number[]>([])
 
   const handleBookSeat = ({ i, j, seatNum }: { i: number; j: number; seatNum: number }) => {
-    if (curSeats[i][j].value === 0) return
-
-    if (curSeats[i][j].isAvailable === true) setCurBooks((prev) => [...prev, { i, j, seatNum }])
+    if (curSeats[i][j].isAvailable === true) setCurBooks((prev) => [...prev, seatNum])
 
     return setCurSeats((prev) => {
       const newSeats = JSON.parse(JSON.stringify(prev))
@@ -80,15 +58,21 @@ export function Seat() {
     })
   }
 
-  const handleCancelSeat = ({ i, j }: { i: number; j: number }) => {
-    if (curSeats[i][j].value === 0) return
-
-    setCurBooks((prev) => prev.filter((item) => item.i !== i || item.j !== j))
+  const handleCancelSeat = (seatNum: number) => {
+    setCurBooks((prev) => prev.filter((item) => item !== seatNum))
 
     return setCurSeats((prev) => {
-      const newSeats = JSON.parse(JSON.stringify(prev))
+      const newSeats = JSON.parse(JSON.stringify(prev)) as ISeat[][]
 
-      newSeats[i][j].isAvailable = newSeats[i][j].isAvailable === false && true
+      newSeats.map((row) =>
+        row.map((seat) => {
+          if (seat?.seatNumber === seatNum) {
+            seat.isAvailable = true
+          }
+
+          return seat
+        })
+      )
 
       return newSeats
     })
@@ -115,14 +99,11 @@ export function Seat() {
                   className={twMerge('flex justify-end gap-5', `w-[calc(100%/${row.length})]`, i === 2 && 'mt-3')}
                 >
                   {row.map((seat, j) =>
-                    seat.value === 1 ? (
+                    seat ? (
                       <SeatItem
-                        handleBookSeat={() => handleBookSeat({ i, j, seatNum: row.length * i + j + 1 })}
+                        handleBookSeat={() => handleBookSeat({ i, j, seatNum: seat.seatNumber })}
                         key={j}
                         seat={seat}
-                        row={row}
-                        i={i}
-                        j={j}
                       />
                     ) : (
                       <div key={j} className='w-6 h-6'></div>
@@ -139,10 +120,10 @@ export function Seat() {
         <div className='text-sm font-semibold'>Các ghế đã đặt</div>
         <div className='flex items-center gap-4 flex-wrap mt-1'>
           {curBooks.map((curBook) => (
-            <div key={curBook.seatNum} className='flex items-center p-1 border'>
-              <span className='text font-semibold'>{curBook.seatNum}</span>
+            <div key={curBook} className='flex items-center p-1 border'>
+              <span className='text font-semibold'>{curBook}</span>
               <div
-                onClick={() => handleCancelSeat({ i: curBook.i, j: curBook.j })}
+                onClick={() => handleCancelSeat(curBook)}
                 className='p-1 text-sm text-primary underline cursor-pointer hover:font-bold'
               >
                 Hủy
@@ -159,7 +140,7 @@ export function Seat() {
   )
 }
 
-export function SeatItem({ seat, row, i, j, handleBookSeat }: ISeatItemProps) {
+export function SeatItem({ seat, handleBookSeat }: ISeatItemProps) {
   return (
     <div
       onClick={handleBookSeat}
@@ -169,7 +150,7 @@ export function SeatItem({ seat, row, i, j, handleBookSeat }: ISeatItemProps) {
       <span
         className={twMerge('block text-xs text-center group-hover:text-primary', !seat.isAvailable && 'text-primary')}
       >
-        {row.length * i + j + 1}
+        {seat.seatNumber}
       </span>
       <Armchair
         className={twMerge(

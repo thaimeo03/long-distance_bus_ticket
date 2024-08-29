@@ -17,8 +17,13 @@ import {
   SelectValue
 } from '@/components/ui/select'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import { ISeat } from '@/common/interfaces/seats.interface'
 
-export default function BookingSheet() {
+interface IBookingSheetProps {
+  seats: ISeat[]
+}
+
+export default function BookingSheet({ seats }: IBookingSheetProps) {
   const router = useRouter()
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -41,7 +46,7 @@ export default function BookingSheet() {
             <SheetTitle className='text-lg font-bold text-center'>Thông tin đặt vé</SheetTitle>
 
             {/* Choose seats */}
-            <Seat />
+            <Seat seats={seats} />
 
             {/* Passenger information */}
             <div className='mt-8 p-2 border'>
