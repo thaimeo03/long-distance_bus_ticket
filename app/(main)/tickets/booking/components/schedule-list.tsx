@@ -4,12 +4,8 @@ import { FireExtinguisher, Milk, Plug, WifiHigh } from 'lucide-react'
 import BusServiceTabs from './bus-services-tab'
 import useBusStore from '@/stores/schedule.store'
 import BookingSheet from './booking-sheet'
-import { useQuery } from '@tanstack/react-query'
-import { getAllAvailableSchedules } from '@/apis/schedules.api'
 import { IAvailableScheduleResponse } from '@/common/interfaces/schedules.interface'
-import { IRouteStop } from '@/common/interfaces/route-stops.interface'
 import { formatMoney, formatTime } from '@/lib/utils'
-import { useEffect } from 'react'
 
 export interface IScheduleItem {
   companyImage: string
@@ -36,25 +32,13 @@ interface IArrivalInfo {
 }
 
 export default function ScheduleList() {
-  const { setScheduleList } = useBusStore()
-  const { data } = useQuery({
-    queryKey: ['schedules'],
-    queryFn: () => getAllAvailableSchedules()
-  })
+  const { hasSearched, scheduleList } = useBusStore()
 
-  useEffect(() => {
-    if (data) {
-      setScheduleList(data.data)
-    }
-  }, [data])
-
-  // console.log(busList)
-
-  if (!data) return null
+  if (!hasSearched || !scheduleList) return null
 
   return (
     <div className='mt-10 flex flex-col gap-5'>
-      {data.data.map((item, index) => (
+      {scheduleList.map((item, index) => (
         <ScheduleItem item={item} key={index} />
       ))}
     </div>

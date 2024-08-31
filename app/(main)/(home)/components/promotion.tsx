@@ -3,7 +3,7 @@ import Link from 'next/link'
 
 export default function Promotion() {
   return (
-    <div className='w-full absolute bottom-0 translate-y-[50%] rounded-2xl bg-white p-8 shadow-lg'>
+    <div className='w-full absolute z-10 bottom-0 translate-y-[50%] rounded-2xl bg-white p-8 shadow-lg'>
       <div className='flex justify-between'>
         <h2 className='text-2xl uppercase font-semibold'>Ưu đãi đang hot</h2>
         <Button

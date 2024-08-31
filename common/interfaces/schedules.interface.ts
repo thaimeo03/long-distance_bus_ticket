@@ -3,6 +3,12 @@ import { IBus } from './buses.interface'
 import { IRouteStop } from './route-stops.interface'
 import { IRoute } from './routes.interface'
 
+export interface IScheduleQuery {
+  pickupLocation: string
+  dropOffLocation: string
+  departureDate: Date
+}
+
 export interface ISchedule {
   id: string
   departureTime: Date

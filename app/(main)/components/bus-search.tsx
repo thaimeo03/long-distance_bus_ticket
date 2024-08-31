@@ -7,46 +7,62 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { cn } from '@/lib/utils'
 import { format } from 'date-fns'
 import { ArrowRightLeft, BusFront, BusIcon, CalendarIcon } from 'lucide-react'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
+import SearchInput from './search-input'
+import useOutSideClick from '@/hooks/useOutSideClick'
+import { useQuery } from '@tanstack/react-query'
+import { getAllRouteStops } from '@/apis/route-stops.api'
+
+export interface IForm {
+  from: string
+  to: string
+}
 
 export default function BusSearch() {
+  // Handle outside click
+  const wrapperRef = useRef(null)
+  const calendarRef = useRef(null)
+  useOutSideClick(wrapperRef, [calendarRef])
+
+  // States
+  const [form, setForm] = useState<IForm>({
+    from: '',
+    to: ''
+  })
   const [date, setDate] = useState<Date>()
 
+  const { data: routeStops } = useQuery({
+    queryKey: ['route-stops'],
+    queryFn: () => getAllRouteStops()
+  })
+
+  const locations = routeStops?.data.map((stop) => stop.location) || []
+
+  // function handler
+  const handleExchange = () => {
+    setForm((prev) => ({ ...prev, from: form.to, to: form.from }))
+  }
+
+  console.log(form)
+
   return (
-    <div className='absolute top-1/2 left-1/2 translate-x-[-50%] -translate-y-1/2'>
+    <div ref={wrapperRef} className='absolute top-1/2 left-1/2 translate-x-[-50%] -translate-y-1/2'>
       <form className='max-h-[104px] flex items-center justify-between bg-white rounded-3xl shadow-md'>
         <div className='relative flex items-center space-x-2 py-6 pl-4 pr-12 border-r border-r-gray-300'>
           <BusIcon className='w-8 h-8 text-muted-foreground' />
-          <div className='grid w-full max-w-sm items-center'>
-            <Label htmlFor='from' className='cursor-pointer text-muted-foreground'>
-              Nơi đi
-            </Label>
-            <Input
-              type='text'
-              id='from'
-              placeholder=''
-              className='outline-none border-none w-[200px] text-lg font-semibold p-0 focus-visible:ring-0 focus-visible:ring-offset-0'
-            />
-          </div>
+          <SearchInput label='Nơi đi' id='from' value={form.from} setForm={setForm} data={locations} />
 
-          <div className='absolute group bg-primary-foreground right-0 translate-x-[50%] rounded-full border border-gray-300 p-2.5 cursor-pointer'>
+          <div
+            onClick={handleExchange}
+            className='absolute group bg-primary-foreground right-0 translate-x-[50%] rounded-full border border-gray-300 p-2.5 cursor-pointer'
+          >
             <ArrowRightLeft className='w-5 h-5 text-muted-foreground group-hover:text-primary' />
           </div>
         </div>
 
         <div className='flex items-center space-x-2 py-6 pl-8 pr-12 border-r border-r-gray-300'>
           <BusFront className='w-8 h-8 text-muted-foreground' />
-          <div className='grid w-full max-w-sm items-center'>
-            <Label htmlFor='to' className='cursor-pointer text-muted-foreground'>
-              Nơi đến
-            </Label>
-            <Input
-              type='text'
-              id='to'
-              placeholder=''
-              className='outline-none border-none w-[200px] text-lg font-semibold p-0 focus-visible:ring-0 focus-visible:ring-offset-0'
-            />
-          </div>
+          <SearchInput label='Nơi đến' id='to' value={form.to} setForm={setForm} data={locations} />
         </div>
 
         <div className='flex items-center space-x-2 p-3'>
@@ -63,7 +79,7 @@ export default function BusSearch() {
                 {date ? format(date, 'dd/MM/yyyy') : <span>Ngày xuất phát</span>}
               </Button>
             </PopoverTrigger>
-            <PopoverContent className='w-auto p-0'>
+            <PopoverContent className='w-auto p-0' ref={calendarRef}>
               <Calendar mode='single' fromDate={new Date()} selected={date} onSelect={setDate} initialFocus />
             </PopoverContent>
           </Popover>
