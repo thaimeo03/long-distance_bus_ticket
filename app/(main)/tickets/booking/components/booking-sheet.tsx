@@ -17,23 +17,50 @@ import { IGetPriceByRouteStopQuery } from '@/common/interfaces/prices.interface'
 import { getPriceByRouteStops } from '@/apis/prices.api'
 import { formatMoney } from '@/lib/utils'
 import useBookingInfoStore from '@/stores/booking.store'
+import { ICreateBookingBody } from '@/common/interfaces/bookings.interface'
+import { createBooking } from '@/apis/bookings.api'
+import { IBus } from '@/common/interfaces/buses.interface'
 
 interface IBookingSheetProps {
   seats: ISeat[]
   routeStops: IRouteStop[]
+  bus: IBus
+  scheduleId: string
 }
 
-export default function BookingSheet({ seats, routeStops }: IBookingSheetProps) {
+export default function BookingSheet({ seats, routeStops, bus, scheduleId }: IBookingSheetProps) {
   const router = useRouter()
-  const { bookingInfo } = useBookingInfoStore()
+  const { bookingInfo, setBookingInfo, setBookingId } = useBookingInfoStore()
+
+  const createBookingMutation = useMutation({
+    mutationFn: (body: ICreateBookingBody) => createBooking(body),
+    onSuccess: (data) => {
+      setBookingId(data.data.bookingId)
+      router.push(ROUTES.tickets_payment.path)
+    },
+    onError: (error) => {
+      console.log(error)
+    }
+  })
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
     // Handle form submission
+    createBookingMutation.mutate({
+      ...bookingInfo,
+      busId: bus.id,
+      scheduleId: scheduleId
+    })
+  }
 
-    // Redirect to payment page
-    router.push(ROUTES.tickets_payment.path)
+  const handleChangeForm = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = e.target
+
+    setBookingInfo({
+      ...bookingInfo,
+      [id]: value
+    })
   }
 
   return (
@@ -64,11 +91,25 @@ export default function BookingSheet({ seats, routeStops }: IBookingSheetProps) 
                 <div className='grid grid-cols-2 space-x-4'>
                   <div className='col-span-1'>
                     <Label htmlFor='email'>Email</Label>
-                    <Input type='email' id='email' placeholder='Email' className='mt-1' />
+                    <Input
+                      type='email'
+                      id='email'
+                      placeholder='Email'
+                      value={bookingInfo.email}
+                      onChange={handleChangeForm}
+                      className='mt-1'
+                    />
                   </div>
                   <div className='col-span-1'>
-                    <Label htmlFor='phone_number'>Số điện thoại</Label>
-                    <Input type='text' id='phone_number' placeholder='Số điện thoại' className='mt-1' />
+                    <Label htmlFor='phoneNumber'>Số điện thoại</Label>
+                    <Input
+                      type='text'
+                      id='phoneNumber'
+                      placeholder='Số điện thoại'
+                      value={bookingInfo.phoneNumber}
+                      onChange={handleChangeForm}
+                      className='mt-1'
+                    />
                   </div>
                 </div>
               </div>
@@ -110,6 +151,12 @@ function PassengerInfo({ routeStops }: { routeStops: IRouteStop[] }) {
         pickupStopId: curPickupId,
         dropOffStopId: curDropOffId
       })
+
+      setBookingInfo({
+        ...bookingInfo,
+        pickupStopId: curPickupId,
+        dropOffStopId: curDropOffId
+      })
     }
   }, [curPickupId, curDropOffId])
 
@@ -118,13 +165,21 @@ function PassengerInfo({ routeStops }: { routeStops: IRouteStop[] }) {
     onSuccess: (data) => {
       setBookingInfo({
         ...bookingInfo,
-        price: data.data.price
+        price: Number(data.data.price)
       })
     },
     onError(error) {
       console.log(error)
     }
   })
+
+  const handleChangeForm = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = e.target
+    setBookingInfo({
+      ...bookingInfo,
+      [id]: id === 'age' ? Number(value) : value
+    })
+  }
 
   return (
     <div className='mt-8 p-2 border'>
@@ -138,11 +193,25 @@ function PassengerInfo({ routeStops }: { routeStops: IRouteStop[] }) {
       <div className='mt-3 grid grid-cols-2 space-x-4'>
         <div className='col-span-1'>
           <Label htmlFor='fullName'>Họ và tên</Label>
-          <Input type='text' id='fullName' placeholder='Họ và tên' className='mt-1' />
+          <Input
+            type='text'
+            id='fullName'
+            placeholder='Họ và tên'
+            value={bookingInfo.fullName}
+            onChange={handleChangeForm}
+            className='mt-1'
+          />
         </div>
         <div className='col-span-1'>
           <Label htmlFor='age'>Tuổi</Label>
-          <Input type='number' id='age' placeholder='Tuổi' className='mt-1' />
+          <Input
+            type='number'
+            id='age'
+            placeholder='Tuổi'
+            value={bookingInfo.age}
+            onChange={handleChangeForm}
+            className='mt-1'
+          />
         </div>
       </div>
 

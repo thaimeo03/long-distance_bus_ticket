@@ -6,6 +6,8 @@ import useBusStore from '@/stores/schedule.store'
 import BookingSheet from './booking-sheet'
 import { IAvailableScheduleResponse } from '@/common/interfaces/schedules.interface'
 import { formatDurationHoursTime, formatMoney, formatTime } from '@/lib/utils'
+import useBookingInfoStore from '@/stores/booking.store'
+import { useEffect } from 'react'
 
 export interface IScheduleItem {
   companyImage: string
@@ -106,7 +108,7 @@ export function ScheduleItem({ item }: { item: IAvailableScheduleResponse }) {
         <div className='flex items-center justify-end'>
           <BusServiceTabs bus={bus} routeStops={route.routeStops} />
 
-          <BookingSheet seats={bus.seats} routeStops={route.routeStops} />
+          <BookingSheet bus={bus} scheduleId={item.schedules[0].id} seats={bus.seats} routeStops={route.routeStops} />
         </div>
       </div>
     </div>
