@@ -5,7 +5,7 @@ import BusServiceTabs from './bus-services-tab'
 import useBusStore from '@/stores/schedule.store'
 import BookingSheet from './booking-sheet'
 import { IAvailableScheduleResponse } from '@/common/interfaces/schedules.interface'
-import { formatMoney, formatTime } from '@/lib/utils'
+import { formatDurationHoursTime, formatMoney, formatTime } from '@/lib/utils'
 
 export interface IScheduleItem {
   companyImage: string
@@ -82,10 +82,13 @@ export function ScheduleItem({ item }: { item: IAvailableScheduleResponse }) {
         </span>
       </div>
       <div className='col-span-1'>
-        <span className='text-foreground font-medium'>{item.route.durationHours}g 00ph</span>
+        <span className='text-foreground font-medium'>{formatDurationHoursTime(route.durationHours)}</span>
       </div>
       <div className='col-span-2'>
-        <span className='text-lg font-bold text-primary'>{formatMoney(route.prices[0].price)} </span>
+        <span className='text-lg font-bold text-primary'>
+          {formatMoney(route.prices[0].price)}{' '}
+          {route.prices.length > 1 && ` - ${formatMoney(route.prices[route.prices.length - 1].price)}`}{' '}
+        </span>
       </div>
       <div className='col-span-2'>
         <div className='mt-4'>
@@ -103,7 +106,7 @@ export function ScheduleItem({ item }: { item: IAvailableScheduleResponse }) {
         <div className='flex items-center justify-end'>
           <BusServiceTabs bus={bus} routeStops={route.routeStops} />
 
-          <BookingSheet seats={bus.seats} />
+          <BookingSheet seats={bus.seats} routeStops={route.routeStops} />
         </div>
       </div>
     </div>

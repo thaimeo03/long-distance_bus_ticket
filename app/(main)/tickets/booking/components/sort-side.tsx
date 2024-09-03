@@ -9,7 +9,7 @@ import useScheduleStore from '@/stores/schedule.store'
 const sortBy = ['Thời gian đến', 'Thời gian đi', 'Giá vé', 'Chỗ trống']
 
 export default function SortSide() {
-  const { hasSearched } = useScheduleStore()
+  const { hasSearched, scheduleList } = useScheduleStore()
   const [curSortBy, setCurSortBy] = useState(sortBy[0])
 
   return (
@@ -18,7 +18,7 @@ export default function SortSide() {
 
       {hasSearched ? (
         <p className='text-sm font-semibold'>
-          0 tìm thấy
+          {scheduleList?.length || 0} tìm thấy
           <span className='text-sm font-normal ml-1'>xe khách</span>
         </p>
       ) : (

@@ -7,24 +7,25 @@ import { Mail, User } from 'lucide-react'
 import { Seat } from './seat'
 import { useRouter } from 'next/navigation'
 import { ROUTES } from '@/common/constants/routes.constant'
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue
-} from '@/components/ui/select'
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { ISeat } from '@/common/interfaces/seats.interface'
+import { IRouteStop } from '@/common/interfaces/route-stops.interface'
+import { useEffect, useMemo, useState } from 'react'
+import { useMutation } from '@tanstack/react-query'
+import { IGetPriceByRouteStopQuery } from '@/common/interfaces/prices.interface'
+import { getPriceByRouteStops } from '@/apis/prices.api'
+import { formatMoney } from '@/lib/utils'
+import useBookingInfoStore from '@/stores/booking.store'
 
 interface IBookingSheetProps {
   seats: ISeat[]
+  routeStops: IRouteStop[]
 }
 
-export default function BookingSheet({ seats }: IBookingSheetProps) {
+export default function BookingSheet({ seats, routeStops }: IBookingSheetProps) {
   const router = useRouter()
+  const { bookingInfo } = useBookingInfoStore()
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -49,51 +50,7 @@ export default function BookingSheet({ seats }: IBookingSheetProps) {
             <Seat seats={seats} />
 
             {/* Passenger information */}
-            <div className='mt-8 p-2 border'>
-              <div className='flex items-center space-x-2'>
-                <div className='w-7 h-7 grid place-items-center bg-emerald-500 rounded-full'>
-                  <User className='w-5 h-5 text-white' />
-                </div>
-                <span className='font-semibold'>Thông tin hành khách và địa điểm</span>
-              </div>
-
-              <div className='mt-3 grid grid-cols-2 space-x-4'>
-                <div className='col-span-1'>
-                  <Label htmlFor='fullName'>Họ và tên</Label>
-                  <Input type='text' id='fullName' placeholder='Họ và tên' className='mt-1' />
-                </div>
-                <div className='col-span-1'>
-                  <Label htmlFor='age'>Tuổi</Label>
-                  <Input type='number' id='age' placeholder='Tuổi' className='mt-1' />
-                </div>
-              </div>
-
-              <div className='mt-3 flex justify-between'>
-                <Select>
-                  <SelectTrigger className='w-[250px]'>
-                    <SelectValue placeholder='Chọn điểm đón' />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectItem value='apple'>Apple</SelectItem>
-                      <SelectItem value='banana'>Banana</SelectItem>
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-
-                <Select>
-                  <SelectTrigger className='w-[250px]'>
-                    <SelectValue placeholder='Chọn điểm trả' />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectItem value='apple'>Apple</SelectItem>
-                      <SelectItem value='banana'>Banana</SelectItem>
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
+            <PassengerInfo routeStops={routeStops} />
 
             {/* Contact information */}
             <div className='mt-8 p-2 border'>
@@ -118,7 +75,15 @@ export default function BookingSheet({ seats }: IBookingSheetProps) {
             </div>
 
             {/* Confirm */}
-            <div className='mt-8 w-full flex justify-end'>
+            <div className='mt-8 w-full flex justify-between'>
+              <div className='mt-2 text-sm font-semibold'>
+                Thành tiền:
+                <span className='ml-1 text-primary'>
+                  {bookingInfo.price > 0 &&
+                    !Number.isNaN(bookingInfo.price) &&
+                    formatMoney(bookingInfo.price * bookingInfo.seats.length)}
+                </span>
+              </div>
               <Button
                 type='submit'
                 variant='outline'
@@ -131,5 +96,96 @@ export default function BookingSheet({ seats }: IBookingSheetProps) {
         </ScrollArea>
       </SheetContent>
     </Sheet>
+  )
+}
+
+function PassengerInfo({ routeStops }: { routeStops: IRouteStop[] }) {
+  const { bookingInfo, setBookingInfo } = useBookingInfoStore()
+  const [curPickupId, setCurPickupId] = useState<string>('')
+  const [curDropOffId, setCurDropOffId] = useState<string>('')
+
+  useEffect(() => {
+    if (curPickupId !== '' && curDropOffId !== '') {
+      getPriceByRouteStopsMutation.mutate({
+        pickupStopId: curPickupId,
+        dropOffStopId: curDropOffId
+      })
+    }
+  }, [curPickupId, curDropOffId])
+
+  const getPriceByRouteStopsMutation = useMutation({
+    mutationFn: (query: IGetPriceByRouteStopQuery) => getPriceByRouteStops(query),
+    onSuccess: (data) => {
+      setBookingInfo({
+        ...bookingInfo,
+        price: data.data.price
+      })
+    },
+    onError(error) {
+      console.log(error)
+    }
+  })
+
+  return (
+    <div className='mt-8 p-2 border'>
+      <div className='flex items-center space-x-2'>
+        <div className='w-7 h-7 grid place-items-center bg-emerald-500 rounded-full'>
+          <User className='w-5 h-5 text-white' />
+        </div>
+        <span className='font-semibold'>Thông tin hành khách và địa điểm</span>
+      </div>
+
+      <div className='mt-3 grid grid-cols-2 space-x-4'>
+        <div className='col-span-1'>
+          <Label htmlFor='fullName'>Họ và tên</Label>
+          <Input type='text' id='fullName' placeholder='Họ và tên' className='mt-1' />
+        </div>
+        <div className='col-span-1'>
+          <Label htmlFor='age'>Tuổi</Label>
+          <Input type='number' id='age' placeholder='Tuổi' className='mt-1' />
+        </div>
+      </div>
+
+      <div className='mt-3 flex justify-between'>
+        <Select value={curPickupId} onValueChange={(value) => setCurPickupId(value)}>
+          <SelectTrigger className='w-[250px]'>
+            <SelectValue placeholder='Chọn điểm đón' />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              {routeStops.map((stop, index) => (
+                <SelectItem key={`pickup-${index}`} value={stop.id}>
+                  {stop.location}
+                </SelectItem>
+              ))}
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+
+        <Select value={curDropOffId} onValueChange={(value) => setCurDropOffId(value)}>
+          <SelectTrigger className='w-[250px]'>
+            <SelectValue placeholder='Chọn điểm trả' />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              {routeStops.map((stop, index) => (
+                <SelectItem key={`drop-${index}`} value={stop.id}>
+                  {stop.location}
+                </SelectItem>
+              ))}
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div className='mt-3'>
+        {bookingInfo.price > 0 && (
+          <div className='font-semibold text-sm'>
+            Giá vé:
+            <span className='ml-1 text-primary'>{formatMoney(bookingInfo.price)}</span>
+          </div>
+        )}
+      </div>
+    </div>
   )
 }

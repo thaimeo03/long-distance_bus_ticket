@@ -1,7 +1,9 @@
+'use client'
 import { Separator } from '@/components/ui/separator'
 import { BusFilterCheckbox, IBusFilterCheckBoxItemProps } from './bus-filter-checkbox'
 import { BusFilterRadioGroup, IBusFilterRadioItem } from './bus-filter-radio-group'
 import { Moon, SunDim, Sunrise, Sunset } from 'lucide-react'
+import useScheduleStore from '@/stores/schedule.store'
 
 const checkBoxItems: IBusFilterCheckBoxItemProps[] = [
   {
@@ -52,25 +54,30 @@ const checkBoxCompanyItems: IBusFilterCheckBoxItemProps[] = [
   }
 ]
 
-const radioDepartureItems: IBusFilterRadioItem[] = [
-  {
-    label: 'Big C Hà Đông'
-  },
-  {
-    label: 'Ngã tư Trung Văn - Tố Hữu'
-  }
-]
-
-const radioArrivalItems: IBusFilterRadioItem[] = [
-  {
-    label: 'Giáp Bát'
-  },
-  {
-    label: 'Trường giao thông vận tải - HN'
-  }
-]
-
 export default function BusFilterSide() {
+  const { scheduleList } = useScheduleStore()
+
+  const radioDepartureItems: IBusFilterRadioItem[] = []
+  const radioArrivalItems: IBusFilterRadioItem[] = []
+
+  if (scheduleList) {
+    for (const item of scheduleList) {
+      for (let i = 0; i < item.route.routeStops.length - 1; i++) {
+        radioDepartureItems.push({
+          label: item.route.routeStops[i].location,
+          id: item.route.routeStops[i].id
+        })
+      }
+    }
+
+    for (const item of scheduleList) {
+      radioArrivalItems.push({
+        label: item.route.routeStops[item.route.routeStops.length - 1].location,
+        id: item.route.routeStops[item.route.routeStops.length - 1].id
+      })
+    }
+  }
+
   return (
     <div>
       <span className='font-bold'>Bộ lọc</span>

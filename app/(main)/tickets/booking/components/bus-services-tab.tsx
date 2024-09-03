@@ -13,6 +13,7 @@ import { Navigation } from 'swiper/modules'
 import useScheduleStore from '@/stores/schedule.store'
 import { IBus } from '@/common/interfaces/buses.interface'
 import { IRouteStop } from '@/common/interfaces/route-stops.interface'
+import { formatTime } from '@/lib/utils'
 
 interface IBusServiceTabsProps {
   name: React.ReactNode
@@ -47,42 +48,14 @@ export default function BusServiceTabs({ bus, routeStops }: IBusServiceTabs) {
       name: <div>{hasSearched ? 'Điểm đón & trả khách' : 'Các điểm dừng xe'}</div>,
       content: (
         <div className='h-60 p-4 grid grid-cols-2'>
-          {hasSearched ? (
-            <>
-              <div className='col-span-1'>
-                <p className='text-lg font-bold text-gray-700 mx-2'>Điểm đón</p>
-                <div className='mt-4 flex flex-col gap-3'>
-                  <div className='flex space-x-4'>
-                    <span className='text-sm font-bold'>05:00</span>
-                    <span className='text-sm'>Sân bay Nội Bài</span>
-                  </div>
-                  <div className='flex space-x-4'>
-                    <span className='text-sm font-bold'>05:35</span>
-                    <span className='text-sm'>4 Thọ Tháp</span>
-                  </div>
-                  <div className='flex space-x-4'>
-                    <span className='text-sm font-bold'>05:50</span>
-                    <span className='text-sm'>43 Nguyễn Quốc Trí</span>
-                  </div>
-                </div>
-              </div>
-              <div className='col-span-1'>
-                <p className='text-lg font-bold text-gray-700 mx-2'>Điểm trả</p>
-                <div className='mt-4 flex flex-col gap-3'>
-                  <div className='flex space-x-4'>
-                    <span className='text-sm font-bold'>08:00</span>
-                    <span className='text-sm'>08A Vincom Shophouse Thái Bình</span>
-                  </div>
-                </div>
-              </div>
-            </>
-          ) : (
+          {hasSearched && (
             <div className='col-span-2'>
-              <p className='text-lg font-bold text-gray-700'>Điểm dừng</p>
+              <p className='text-lg font-bold text-gray-700'>Các điểm đón - trả khách</p>
               <div className='mt-4 flex gap-5 flex-wrap'>
-                {routeStops.map((item, index) => (
-                  <div key={index} className='flex space-x-4'>
-                    <span className='text-sm'>{item.location}</span>
+                {routeStops.map((stop, index) => (
+                  <div className='flex space-x-4' key={index}>
+                    <span className='text-sm font-bold'>{formatTime(stop.arrivalTime)}</span>
+                    <span className='text-sm'>{stop.location}</span>
                   </div>
                 ))}
               </div>

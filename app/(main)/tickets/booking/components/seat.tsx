@@ -1,9 +1,8 @@
 'use client'
 import { ISeat } from '@/common/interfaces/seats.interface'
-import { Button } from '@/components/ui/button'
-import useScheduleStore from '@/stores/schedule.store'
+import useBookingInfoStore from '@/stores/booking.store'
 import { Armchair, ShipWheel } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { twMerge } from 'tailwind-merge'
 
 export interface ISeatProps {
@@ -43,13 +42,18 @@ function transformSeats(seats: ISeat[]): (ISeat | null)[][] {
 }
 
 export function Seat({ seats }: ISeatProps) {
+  const { bookingInfo, setBookingInfo } = useBookingInfoStore()
   const [curSeats, setCurSeats] = useState<ISeat[][]>(transformSeats(seats) as ISeat[][])
   const [curBooks, setCurBooks] = useState<number[]>([])
+
+  useEffect(() => {
+    setBookingInfo({ ...bookingInfo, seats: curBooks })
+  }, [curBooks.length])
 
   const handleBookSeat = ({ i, j, seatNum }: { i: number; j: number; seatNum: number }) => {
     if (curSeats[i][j].isAvailable === true) setCurBooks((prev) => [...prev, seatNum])
 
-    return setCurSeats((prev) => {
+    setCurSeats((prev) => {
       const newSeats = JSON.parse(JSON.stringify(prev))
 
       newSeats[i][j].isAvailable = newSeats[i][j].isAvailable === true && false
@@ -61,7 +65,7 @@ export function Seat({ seats }: ISeatProps) {
   const handleCancelSeat = (seatNum: number) => {
     setCurBooks((prev) => prev.filter((item) => item !== seatNum))
 
-    return setCurSeats((prev) => {
+    setCurSeats((prev) => {
       const newSeats = JSON.parse(JSON.stringify(prev)) as ISeat[][]
 
       newSeats.map((row) =>
@@ -130,10 +134,6 @@ export function Seat({ seats }: ISeatProps) {
               </div>
             </div>
           ))}
-        </div>
-        <div className='mt-2 text-sm font-semibold'>
-          Thành tiền:
-          <span className='ml-1 text-primary'>{new Intl.NumberFormat('en-DE').format(155000 * curBooks.length)} ₫</span>
         </div>
       </div>
     </div>

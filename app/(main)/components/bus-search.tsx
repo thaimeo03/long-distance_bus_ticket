@@ -1,8 +1,6 @@
 'use client'
 import { Button } from '@/components/ui/button'
 import { Calendar } from '@/components/ui/calendar'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { cn } from '@/lib/utils'
 import { format } from 'date-fns'
@@ -10,15 +8,27 @@ import { ArrowRightLeft, BusFront, BusIcon, CalendarIcon } from 'lucide-react'
 import { useRef, useState } from 'react'
 import SearchInput from './search-input'
 import useOutSideClick from '@/hooks/useOutSideClick'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { getAllRouteStops } from '@/apis/route-stops.api'
+import { IScheduleQuery } from '@/common/interfaces/schedules.interface'
+import { getAllAvailableSchedules } from '@/apis/schedules.api'
+import useScheduleStore from '@/stores/schedule.store'
+import { useRouter } from 'next/navigation'
+import { ROUTES } from '@/common/constants/routes.constant'
+import { DialogClose } from '@/components/ui/dialog'
+import { useScheduleSearchForm } from '@/stores/local.store'
 
 export interface IForm {
   from: string
   to: string
 }
 
-export default function BusSearch() {
+export default function BusSearch({ children }: { children: React.ReactNode }) {
+  // Initialize
+  const router = useRouter()
+  const { setScheduleList, setHasSearched } = useScheduleStore()
+  const { setForm: setScheduleSearchForm } = useScheduleSearchForm()
+
   // Handle outside click
   const wrapperRef = useRef(null)
   const calendarRef = useRef(null)
@@ -31,6 +41,7 @@ export default function BusSearch() {
   })
   const [date, setDate] = useState<Date>()
 
+  // Queries
   const { data: routeStops } = useQuery({
     queryKey: ['route-stops'],
     queryFn: () => getAllRouteStops()
@@ -38,16 +49,42 @@ export default function BusSearch() {
 
   const locations = routeStops?.data.map((stop) => stop.location) || []
 
+  const searchMutation = useMutation({
+    mutationKey: ['schedule-search'],
+    mutationFn: (query: IScheduleQuery) => getAllAvailableSchedules(query),
+    onSuccess: (data) => {
+      setHasSearched(true)
+      setScheduleList(data.data)
+      // Redirect
+      router.push(ROUTES.tickets_booking.path)
+    }
+  })
+
   // function handler
   const handleExchange = () => {
     setForm((prev) => ({ ...prev, from: form.to, to: form.from }))
   }
 
-  console.log(form)
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+
+    // Handle form submission
+    const query: IScheduleQuery = {
+      pickupLocation: form.from,
+      dropOffLocation: form.to,
+      departureDate: date || new Date()
+    }
+
+    searchMutation.mutate(query)
+    setScheduleSearchForm(query)
+  }
 
   return (
     <div ref={wrapperRef} className='absolute top-1/2 left-1/2 translate-x-[-50%] -translate-y-1/2'>
-      <form className='max-h-[104px] flex items-center justify-between bg-white rounded-3xl shadow-md'>
+      <form
+        onSubmit={handleSubmit}
+        className='max-h-[104px] flex items-center justify-between bg-white rounded-3xl shadow-md'
+      >
         <div className='relative flex items-center space-x-2 py-6 pl-4 pr-12 border-r border-r-gray-300'>
           <BusIcon className='w-8 h-8 text-muted-foreground' />
           <SearchInput label='Nơi đi' id='from' value={form.from} setForm={setForm} data={locations} />
@@ -85,9 +122,7 @@ export default function BusSearch() {
           </Popover>
         </div>
 
-        <Button className='px-6 py-2 text-secondary h-[104px] rounded-l-none rounded-r-3xl text-lg bg-red-500 hover:bg-red-600'>
-          Tìm kiếm xe khách
-        </Button>
+        {children}
       </form>
     </div>
   )
