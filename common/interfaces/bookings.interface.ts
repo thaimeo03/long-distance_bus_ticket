@@ -4,6 +4,11 @@ import { ISchedule } from './schedules.interface'
 import { ISeat } from './seats.interface'
 import { IUser } from './users.interface'
 
+export interface ICancelBookingBody {
+  ticketCode: string
+  email: string
+}
+
 export interface ICreateBookingBody {
   fullName: string
   email: string
