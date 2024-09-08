@@ -1,11 +1,14 @@
 import Link from 'next/link'
-
+import { useForm } from 'react-hook-form'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { ROUTES } from '@/common/constants/routes.constant'
+import { yupResolver } from '@hookform/resolvers/yup'
 
 export default function Login() {
+  //
+
   return (
     <div>
       <div className='grid gap-2 text-center'>
