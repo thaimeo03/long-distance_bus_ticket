@@ -14,11 +14,13 @@ import { useToast } from '@/hooks/use-toast'
 import { ErrorResponse } from '@/common/interfaces/response.interface'
 import Spinner from '@/components/spinner'
 import { useRouter } from 'next/navigation'
+import useUserStore from '@/stores/user.store'
 
 export default function Register() {
   // Hooks
   const { toast } = useToast()
   const router = useRouter()
+  const { setIsAuth } = useUserStore()
 
   const {
     register,
@@ -33,6 +35,7 @@ export default function Register() {
     mutationFn: (body: IRegisterBody) => registerUser(body),
     onSuccess: () => {
       router.push(ROUTES.home.path)
+      setIsAuth(true)
     },
     onError: (error: ErrorResponse) => {
       toast({

@@ -1,6 +1,6 @@
 import { DataResponse, MessageResponse } from '@/common/interfaces/response.interface'
 import api from './api'
-import { ILoginBody, IRegisterBody } from '@/common/interfaces/users.interface'
+import { ILoginBody, IProfileResponse, IRegisterBody } from '@/common/interfaces/users.interface'
 
 export const registerUser = async (body: IRegisterBody) => {
   const res = await api.post<MessageResponse>('/users/register', body)
@@ -9,5 +9,10 @@ export const registerUser = async (body: IRegisterBody) => {
 
 export const loginUser = async (body: ILoginBody) => {
   const res = await api.post<MessageResponse>('/users/login', body)
+  return res.data
+}
+
+export const getProfile = async () => {
+  const res = await api.get<DataResponse<IProfileResponse>>('/users/me')
   return res.data
 }

@@ -14,11 +14,13 @@ import { loginUser } from '@/apis/users.api'
 import { ErrorResponse } from '@/common/interfaces/response.interface'
 import { ILoginSchema } from '@/common/schemas/users.schema'
 import Spinner from '@/components/spinner'
+import useUserStore from '@/stores/user.store'
 
 export default function Login() {
   // Hooks
   const { toast } = useToast()
   const router = useRouter()
+  const { setIsAuth } = useUserStore()
 
   const {
     register,
@@ -33,6 +35,7 @@ export default function Login() {
     mutationFn: (body: ILoginBody) => loginUser(body),
     onSuccess: () => {
       router.push(ROUTES.home.path)
+      setIsAuth(true)
     },
     onError: (error: ErrorResponse) => {
       toast({

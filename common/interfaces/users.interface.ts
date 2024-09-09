@@ -14,6 +14,16 @@ export interface ILoginBody {
   password: string
 }
 
+export interface IProfileResponse {
+  email: string
+  fullName: string
+  phoneNumber: string
+  age: number | null
+  role: Role
+  sex: Sex | null
+  dateOfBirth: Date | null
+}
+
 export interface IUser {
   id: string
   email: string

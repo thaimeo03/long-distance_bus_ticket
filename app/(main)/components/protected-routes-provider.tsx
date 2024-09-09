@@ -18,5 +18,5 @@ export default function ProtectedRoutesProvider({ children }: { children: React.
     }
   }, [isAuth])
 
-  return <>{children}</>
+  return isAuth ? <>{children}</> : null
 }
