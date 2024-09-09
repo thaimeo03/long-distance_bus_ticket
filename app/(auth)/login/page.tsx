@@ -1,3 +1,4 @@
+'use client'
 import Link from 'next/link'
 import { useForm } from 'react-hook-form'
 import { Button } from '@/components/ui/button'
@@ -5,9 +6,45 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { ROUTES } from '@/common/constants/routes.constant'
 import { yupResolver } from '@hookform/resolvers/yup'
+import { useToast } from '@/hooks/use-toast'
+import { useRouter } from 'next/navigation'
+import { ILoginBody } from '@/common/interfaces/users.interface'
+import { useMutation } from '@tanstack/react-query'
+import { loginUser } from '@/apis/users.api'
+import { ErrorResponse } from '@/common/interfaces/response.interface'
+import { ILoginSchema } from '@/common/schemas/users.schema'
+import Spinner from '@/components/spinner'
 
 export default function Login() {
-  //
+  // Hooks
+  const { toast } = useToast()
+  const router = useRouter()
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm<ILoginBody>({
+    resolver: yupResolver(ILoginSchema)
+  })
+
+  // Queries
+  const loginMutation = useMutation({
+    mutationFn: (body: ILoginBody) => loginUser(body),
+    onSuccess: () => {
+      router.push(ROUTES.home.path)
+    },
+    onError: (error: ErrorResponse) => {
+      toast({
+        title: (error.response?.data?.message as string) || error.message,
+        variant: 'destructive'
+      })
+    }
+  })
+
+  const handleLoginForm = (data: ILoginBody) => {
+    loginMutation.mutate(data)
+  }
 
   return (
     <div>
@@ -15,21 +52,21 @@ export default function Login() {
         <h1 className='text-3xl font-bold'>Đăng nhập</h1>
         <p className='text-balance text-muted-foreground'>Nhập thông tin phía dưới để đăng nhập</p>
       </div>
-      <form className='grid gap-4 mt-3'>
-        <div className='grid gap-2'>
+      <form onSubmit={handleSubmit(handleLoginForm)} className='grid gap-4 mt-3'>
+        <div className='relative grid gap-2'>
           <Label htmlFor='email'>Email</Label>
-          <Input id='email' type='email' placeholder='m@example.com' required />
+          <Input id='email' type='text' placeholder='m@example.com' {...register('email')} />
+          <span className='absolute -bottom-4 text-xs text-red-600'>{errors.email?.message}</span>
         </div>
-        <div className='grid gap-2'>
+        <div className='relative grid gap-2'>
           <div className='flex items-center'>
             <Label htmlFor='password'>Mật khẩu</Label>
-            <Link href='/forgot-password' className='ml-auto inline-block text-sm underline'>
-              Quên mật khẩu?
-            </Link>
+            <span className='absolute -bottom-4 text-xs text-red-600'>{errors.password?.message}</span>
           </div>
-          <Input id='password' type='password' required />
+          <Input id='password' type='password' {...register('password')} />
         </div>
-        <Button type='submit' className='w-full'>
+        <Button type='submit' disabled={loginMutation.isPending} className='w-full'>
+          {loginMutation.isPending && <Spinner className='mr-1' />}
           Đăng nhập
         </Button>
         <Button variant='outline' className='w-full flex space-x-2'>

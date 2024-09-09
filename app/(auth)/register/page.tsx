@@ -42,7 +42,7 @@ export default function Register() {
     }
   })
 
-  const handleLoginForm = (data: IRegisterBody) => {
+  const handleRegisterForm = (data: IRegisterBody) => {
     registerMutation.mutate(data)
   }
 
@@ -51,7 +51,7 @@ export default function Register() {
       <div className='grid gap-2 text-center'>
         <h1 className='text-3xl font-bold'>Đăng ký</h1>
       </div>
-      <form onSubmit={handleSubmit(handleLoginForm)} className='grid gap-6 mt-3'>
+      <form onSubmit={handleSubmit(handleRegisterForm)} className='grid gap-6 mt-3'>
         <div className='relative grid gap-2'>
           <Label htmlFor='full_name'>Họ và tên</Label>
           <Input id='full_name' type='text' placeholder='Tran Hong Thai' {...register('fullName')} />
