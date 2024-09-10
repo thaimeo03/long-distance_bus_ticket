@@ -5,14 +5,14 @@ interface UserState {
   isAuth: boolean
   userInfo: IProfileResponse | null
   setIsAuth: (isAuth: boolean) => void
-  setUserInfo: (userInfo: IProfileResponse) => void
+  setUserInfo: (userInfo: IProfileResponse | null) => void
 }
 
 const useUserStore = create<UserState>((set) => ({
   isAuth: false,
   userInfo: null,
   setIsAuth: (isAuth: boolean) => set({ isAuth }),
-  setUserInfo: (userInfo: IProfileResponse) => set({ userInfo })
+  setUserInfo: (userInfo: IProfileResponse | null) => set({ userInfo })
 }))
 
 export default useUserStore

@@ -26,8 +26,8 @@ class Api {
       async (error) => {
         const originalRequest = error.config
 
-        if (error.response && error.response.status === 401 && !originalRequest._retry) {
-          originalRequest._retry = true // Prevent infinite loop
+        if (error.response && error.response.status === 401 && originalRequest._retry) {
+          originalRequest._retry = false // Prevent infinite loop
 
           try {
             // Call refresh token API

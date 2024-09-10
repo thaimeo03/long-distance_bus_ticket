@@ -12,6 +12,11 @@ export const loginUser = async (body: ILoginBody) => {
   return res.data
 }
 
+export const logoutUser = async () => {
+  const res = await api.post<MessageResponse>('/users/logout')
+  return res.data
+}
+
 export const getProfile = async () => {
   const res = await api.get<DataResponse<IProfileResponse>>('/users/me')
   return res.data

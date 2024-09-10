@@ -19,7 +19,7 @@ export default function GetUserInfoProvider({ children }: { children: React.Reac
       }
       setUserInfo(data.data)
     }
-  }, [data, isSuccess])
+  }, [isSuccess])
 
   return <>{children}</>
 }
