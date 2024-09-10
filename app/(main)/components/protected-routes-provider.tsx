@@ -8,13 +8,9 @@ export default function ProtectedRoutesProvider({ children }: { children: React.
   const router = useRouter()
   const { isAuth } = useUserStore()
 
-  if (!isAuth) {
-    router.push(ROUTES.login.path)
-  }
-
   useEffect(() => {
     if (!isAuth) {
-      router.push(ROUTES.login.path)
+      router.push(ROUTES.home.path)
     }
   }, [isAuth])
 

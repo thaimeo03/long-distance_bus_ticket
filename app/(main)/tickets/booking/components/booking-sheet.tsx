@@ -20,6 +20,9 @@ import useBookingInfoStore from '@/stores/booking.store'
 import { ICreateBookingBody } from '@/common/interfaces/bookings.interface'
 import { createBooking } from '@/apis/bookings.api'
 import { IBus } from '@/common/interfaces/buses.interface'
+import useUserStore from '@/stores/user.store'
+import { useToast } from '@/hooks/use-toast'
+import { ErrorResponse } from '@/common/interfaces/response.interface'
 
 interface IBookingSheetProps {
   seats: ISeat[]
@@ -30,7 +33,21 @@ interface IBookingSheetProps {
 
 export default function BookingSheet({ seats, routeStops, bus, scheduleId }: IBookingSheetProps) {
   const router = useRouter()
+  const { toast } = useToast()
+  const { userInfo } = useUserStore()
   const { bookingInfo, setBookingInfo, setBookingId } = useBookingInfoStore()
+
+  useEffect(() => {
+    if (userInfo) {
+      setBookingInfo({
+        ...bookingInfo,
+        email: userInfo.email,
+        phoneNumber: userInfo.phoneNumber,
+        age: userInfo.age || 0,
+        fullName: userInfo.fullName
+      })
+    }
+  }, [userInfo])
 
   const createBookingMutation = useMutation({
     mutationFn: (body: ICreateBookingBody) => createBooking(body),
@@ -38,8 +55,11 @@ export default function BookingSheet({ seats, routeStops, bus, scheduleId }: IBo
       setBookingId(data.data.bookingId)
       router.push(ROUTES.tickets_payment.path)
     },
-    onError: (error) => {
-      console.log(error)
+    onError: (error: ErrorResponse) => {
+      toast({
+        title: (error.response?.data?.message[0] as string) || error.message,
+        variant: 'destructive'
+      })
     }
   })
 
@@ -51,15 +71,6 @@ export default function BookingSheet({ seats, routeStops, bus, scheduleId }: IBo
       ...bookingInfo,
       busId: bus.id,
       scheduleId: scheduleId
-    })
-  }
-
-  const handleChangeForm = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { id, value } = e.target
-
-    setBookingInfo({
-      ...bookingInfo,
-      [id]: value
     })
   }
 
@@ -80,40 +91,7 @@ export default function BookingSheet({ seats, routeStops, bus, scheduleId }: IBo
             <PassengerInfo routeStops={routeStops} />
 
             {/* Contact information */}
-            <div className='mt-8 p-2 border'>
-              <div className='flex items-center space-x-2'>
-                <div className='w-7 h-7 grid place-items-center bg-yellow-500 rounded-full'>
-                  <Mail className='w-5 h-5 text-white' />
-                </div>
-                <span className='font-semibold'>Chi tiết liên hệ</span>
-              </div>
-              <div className='mt-3'>
-                <div className='grid grid-cols-2 space-x-4'>
-                  <div className='col-span-1'>
-                    <Label htmlFor='email'>Email</Label>
-                    <Input
-                      type='email'
-                      id='email'
-                      placeholder='Email'
-                      value={bookingInfo.email}
-                      onChange={handleChangeForm}
-                      className='mt-1'
-                    />
-                  </div>
-                  <div className='col-span-1'>
-                    <Label htmlFor='phoneNumber'>Số điện thoại</Label>
-                    <Input
-                      type='text'
-                      id='phoneNumber'
-                      placeholder='Số điện thoại'
-                      value={bookingInfo.phoneNumber}
-                      onChange={handleChangeForm}
-                      className='mt-1'
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
+            <ContactInfo />
 
             {/* Confirm */}
             <div className='mt-8 w-full flex justify-between'>
@@ -128,6 +106,7 @@ export default function BookingSheet({ seats, routeStops, bus, scheduleId }: IBo
               <Button
                 type='submit'
                 variant='outline'
+                disabled={createBookingMutation.isPending}
                 className='text-white bg-red-500 hover:bg-primary hover:text-white px-6 self-end'
               >
                 Tiếp tục
@@ -254,6 +233,56 @@ function PassengerInfo({ routeStops }: { routeStops: IRouteStop[] }) {
             <span className='ml-1 text-primary'>{formatMoney(bookingInfo.price)}</span>
           </div>
         )}
+      </div>
+    </div>
+  )
+}
+
+function ContactInfo() {
+  const { bookingInfo, setBookingInfo } = useBookingInfoStore()
+
+  const handleChangeForm = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = e.target
+
+    setBookingInfo({
+      ...bookingInfo,
+      [id]: value
+    })
+  }
+
+  return (
+    <div className='mt-8 p-2 border'>
+      <div className='flex items-center space-x-2'>
+        <div className='w-7 h-7 grid place-items-center bg-yellow-500 rounded-full'>
+          <Mail className='w-5 h-5 text-white' />
+        </div>
+        <span className='font-semibold'>Chi tiết liên hệ</span>
+      </div>
+      <div className='mt-3'>
+        <div className='grid grid-cols-2 space-x-4'>
+          <div className='col-span-1'>
+            <Label htmlFor='email'>Email</Label>
+            <Input
+              type='email'
+              id='email'
+              placeholder='Email'
+              value={bookingInfo.email}
+              onChange={handleChangeForm}
+              className='mt-1'
+            />
+          </div>
+          <div className='col-span-1'>
+            <Label htmlFor='phoneNumber'>Số điện thoại</Label>
+            <Input
+              type='text'
+              id='phoneNumber'
+              placeholder='Số điện thoại'
+              value={bookingInfo.phoneNumber}
+              onChange={handleChangeForm}
+              className='mt-1'
+            />
+          </div>
+        </div>
       </div>
     </div>
   )
