@@ -17,7 +17,7 @@ export default function BusRoute() {
       <ArrowRight className='w-4 h-4 text-foreground' />
       <span className='max-w-[150px] line-clamp-1 text-sm font-semibold'>{form.dropOffLocation}</span>
       <span className='px-2 border-l border-x border-x-foreground text-sm font-semibold'>
-        {formatDate(form.departureDate, 'dd/MM/yyyy')}
+        {form.departureDate && formatDate(form.departureDate, 'dd/MM/yyyy')}
       </span>
       <Button
         variant='outline'

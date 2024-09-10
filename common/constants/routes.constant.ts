@@ -30,5 +30,9 @@ export const ROUTES = {
   tickets_cancellation: {
     path: '/tickets/cancellation',
     name: 'Hủy vé'
+  },
+  google_auth: {
+    path: `${process.env.NEXT_PUBLIC_HOST_URL}/auth/google`,
+    name: 'Backend host'
   }
 } as const

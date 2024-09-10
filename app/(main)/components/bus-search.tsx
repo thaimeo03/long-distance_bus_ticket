@@ -15,8 +15,9 @@ import { getAllAvailableSchedules } from '@/apis/schedules.api'
 import useScheduleStore from '@/stores/schedule.store'
 import { useRouter } from 'next/navigation'
 import { ROUTES } from '@/common/constants/routes.constant'
-import { DialogClose } from '@/components/ui/dialog'
 import { useScheduleSearchForm } from '@/stores/local.store'
+import { ErrorResponse } from '@/common/interfaces/response.interface'
+import { useToast } from '@/hooks/use-toast'
 
 export interface IForm {
   from: string
@@ -26,6 +27,7 @@ export interface IForm {
 export default function BusSearch({ children }: { children: React.ReactNode }) {
   // Initialize
   const router = useRouter()
+  const { toast } = useToast()
   const { setScheduleList, setHasSearched } = useScheduleStore()
   const { setForm: setScheduleSearchForm } = useScheduleSearchForm()
 
@@ -55,8 +57,16 @@ export default function BusSearch({ children }: { children: React.ReactNode }) {
     onSuccess: (data) => {
       setHasSearched(true)
       setScheduleList(data.data)
+      setForm({ from: '', to: '' })
+      setDate(undefined)
       // Redirect
       router.push(ROUTES.tickets_booking.path)
+    },
+    onError: (error: ErrorResponse) => {
+      toast({
+        title: (error.response?.data?.message as string) || error.message,
+        variant: 'destructive'
+      })
     }
   })
 
@@ -72,7 +82,7 @@ export default function BusSearch({ children }: { children: React.ReactNode }) {
     const query: IScheduleQuery = {
       pickupLocation: form.from,
       dropOffLocation: form.to,
-      departureDate: date || new Date()
+      departureDate: date
     }
 
     searchMutation.mutate(query)
@@ -80,7 +90,7 @@ export default function BusSearch({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div ref={wrapperRef} className='absolute top-1/2 left-1/2 translate-x-[-50%] -translate-y-1/2'>
+    <div ref={wrapperRef} className='absolute z-10 top-1/2 left-1/2 translate-x-[-50%] -translate-y-1/2'>
       <form
         onSubmit={handleSubmit}
         className='max-h-[104px] flex items-center justify-between bg-white rounded-3xl shadow-md'

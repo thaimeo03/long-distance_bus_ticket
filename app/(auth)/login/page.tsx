@@ -45,6 +45,7 @@ export default function Login() {
     }
   })
 
+  // Handlers
   const handleLoginForm = (data: ILoginBody) => {
     loginMutation.mutate(data)
   }
@@ -72,7 +73,7 @@ export default function Login() {
           {loginMutation.isPending && <Spinner className='mr-1' />}
           Đăng nhập
         </Button>
-        <Button variant='outline' className='w-full flex space-x-2'>
+        <Link href={ROUTES.google_auth.path} className='border p-1 w-full flex justify-center space-x-2'>
           <svg xmlns='http://www.w3.org/2000/svg' x='0px' y='0px' width='22' height='22' viewBox='0 0 48 48'>
             <path
               fill='#fbc02d'
@@ -92,7 +93,7 @@ export default function Login() {
             ></path>
           </svg>
           <span>Đăng nhập Google</span>
-        </Button>
+        </Link>
       </form>
       <div className='mt-4 text-center text-sm'>
         Chưa có tài khoản?{' '}

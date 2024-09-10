@@ -6,7 +6,7 @@ import { IRoute } from './routes.interface'
 export interface IScheduleQuery {
   pickupLocation: string
   dropOffLocation: string
-  departureDate: Date
+  departureDate: Date | undefined
 }
 
 export interface ISchedule {

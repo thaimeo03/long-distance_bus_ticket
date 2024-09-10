@@ -1,6 +1,10 @@
+'use client'
+import useBookingInfoStore from '@/stores/booking.store'
 import { BusFront, CalendarDays, CircleUser, MapPin, TriangleAlert } from 'lucide-react'
 
 export default function Summary() {
+  const { bookingId } = useBookingInfoStore()
+
   return (
     <div className='w-2/3'>
       <h1 className='text-xl font-semibold'>Thông tin vé đặt</h1>
@@ -15,7 +19,6 @@ export default function Summary() {
           <li className='flex space-x-2 py-4 px-2 items-center border-b-2 justify-center'>
             <BusFront className='w-8 h-8 text-gray-700' />
             <div className='text-lg font-bold text-primary'>Xe Việt Nam</div>
-            <span className='text-sm text-foreground'>Limousine</span>
           </li>
           <li className='flex space-x-2 py-4 px-2 items-center border-b-2'>
             <CalendarDays className='w-5 h-5 text-primary' />

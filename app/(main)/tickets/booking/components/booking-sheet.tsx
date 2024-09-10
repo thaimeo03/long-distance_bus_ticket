@@ -57,7 +57,7 @@ export default function BookingSheet({ seats, routeStops, bus, scheduleId }: IBo
     },
     onError: (error: ErrorResponse) => {
       toast({
-        title: (error.response?.data?.message[0] as string) || error.message,
+        title: (error.response?.data?.message as string) || error.message,
         variant: 'destructive'
       })
     }
