@@ -35,3 +35,9 @@ export interface IUser {
   dateOfBirth?: Date
   bookings?: IBooking[]
 }
+
+export interface IUpdateProfileBody {
+  fullName?: string
+  phoneNumber?: string
+  age?: number
+}
