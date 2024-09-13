@@ -38,3 +38,15 @@ export interface IBooking {
   pickupStop?: IRouteStop
   dropOffStop?: IRouteStop
 }
+
+export interface IBookingHistoryResponse {
+  code: string
+  quantity: number
+  amount: string
+  seats: number[]
+  pickupLocation: string
+  dropOffLocation: string
+  departureTime: string
+  busName: string
+  bookingDate: string
+}

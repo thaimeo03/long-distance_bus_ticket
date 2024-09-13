@@ -22,3 +22,7 @@ export function formatMoney(money: number) {
   // 155000 -> 155.000
   return money.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' ₫'
 }
+
+export function formatDate(date: string) {
+  return new Date(date).toLocaleDateString('en-GB')
+}
