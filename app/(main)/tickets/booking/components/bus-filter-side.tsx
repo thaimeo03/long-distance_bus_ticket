@@ -83,12 +83,12 @@ export default function BusFilterSide() {
       <span className='font-bold'>Bộ lọc</span>
 
       <BusFilterCheckbox checkBoxItems={checkBoxItems} listName='Giờ đi' type='departure' />
-      <BusFilterRadioGroup radioItems={radioDepartureItems} listName='Điểm đón' type='departure' />
+      {/* <BusFilterRadioGroup radioItems={radioDepartureItems} listName='Điểm đón' type='departure' /> */}
 
       <Separator className='mt-5 bg-primary' />
 
       <BusFilterCheckbox checkBoxItems={checkBoxItems} listName='Giờ dến' type='arrival' />
-      <BusFilterRadioGroup radioItems={radioArrivalItems} listName='Điểm trả' type='arrival' />
+      {/* <BusFilterRadioGroup radioItems={radioArrivalItems} listName='Điểm trả' type='arrival' /> */}
 
       <Separator className='mt-5 bg-primary' />
       <BusFilterCheckbox checkBoxItems={checkBoxCompanyItems} listName='Nhà xe' type='bus-company' />

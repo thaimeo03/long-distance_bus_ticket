@@ -1,9 +1,19 @@
 'use client'
+import { getBookingInfo } from '@/apis/bookings.api'
+import { formateTimeAndDate, formatMoney } from '@/lib/utils'
 import useBookingInfoStore from '@/stores/booking.store'
+import { useQuery } from '@tanstack/react-query'
 import { BusFront, CalendarDays, CircleUser, MapPin, TriangleAlert } from 'lucide-react'
 
 export default function Summary() {
   const { bookingId } = useBookingInfoStore()
+  const { data } = useQuery({
+    queryKey: ['booking-info', bookingId],
+    queryFn: () => getBookingInfo(bookingId as string)
+  })
+  const bookingInfo = data?.data
+
+  if (!bookingInfo) return null
 
   return (
     <div className='w-2/3'>
@@ -25,13 +35,14 @@ export default function Summary() {
             <div className='flex w-full justify-between'>
               <div className='flex flex-col'>
                 <span className='text-sm'>Khởi hành</span>
-                <span className='font-semibold'>22/08/2024</span>
+                <span className='font-semibold'>{formateTimeAndDate(bookingInfo.schedule.departureTime)}</span>
               </div>
               <div className='flex flex-col'>
                 <span className='text-sm'>Ghế</span>
-                <ul className='flex space-x-3 font-semibold'>
-                  <li>2</li>
-                  <li>7</li>
+                <ul className='flex space-x-2 font-semibold'>
+                  {bookingInfo.seats.map((seat) => (
+                    <li key={seat.id}>{seat.seatNumber}</li>
+                  ))}
                 </ul>
               </div>
             </div>
@@ -41,14 +52,12 @@ export default function Summary() {
             <div className='flex w-full justify-between'>
               <div className='flex flex-col'>
                 <span className='text-sm'>Điểm đón</span>
-                <span className='font-semibold'>Hà Nội</span>
-                <span className='text-sm text-gray-600'>BigC Hà Đông</span>
+                <span className='font-semibold'>{bookingInfo.pickupStop.location}</span>
               </div>
               <div className='flex flex-col items-end'>
                 <span className='text-sm'>Điểm trả</span>
                 <div className='flex flex-col items-end'>
-                  <span className='font-semibold'>Thái Bình</span>
-                  <span>08A Vincom Shophouse Thái Bình</span>
+                  <span className='font-semibold'>{bookingInfo.dropOffStop.location}</span>
                 </div>
               </div>
             </div>
@@ -57,13 +66,13 @@ export default function Summary() {
             <CircleUser className='w-5 h-5 text-primary' />
             <div className='flex w-full justify-between'>
               <div className='flex flex-col'>
-                <span className='text-sm'>Họ tên</span>
-                <span className='font-semibold'>Trần Hồng Thái</span>
+                <span className='text-sm'>Họ và tên</span>
+                <span className='font-semibold'>{bookingInfo.user.fullName}</span>
               </div>
               <div className='flex flex-col items-end'>
                 <span className='text-sm'>Email</span>
                 <div className='flex flex-col items-end'>
-                  <span className='font-semibold'>thai@example.com</span>
+                  <span className='font-semibold'>{bookingInfo.user.email}</span>
                 </div>
               </div>
             </div>
@@ -73,7 +82,9 @@ export default function Summary() {
           <li className='text-red-500'>Chi tiết giá</li>
           <li className='mt-2 flex justify-between items-center'>
             <span>Tổng cộng</span>
-            <span className='text-red-500'>155.000đ</span>
+            <span className='text-red-500'>
+              {formatMoney(Number(bookingInfo.payment.amount) * bookingInfo.quantity)}
+            </span>
           </li>
         </ul>
       </div>

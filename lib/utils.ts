@@ -26,3 +26,11 @@ export function formatMoney(money: number) {
 export function formatDate(date: string) {
   return new Date(date).toLocaleDateString('en-GB')
 }
+
+export function formateTimeAndDate(timeStamp: string) {
+  const date = new Date(timeStamp)
+  const dateString = date.toLocaleDateString('en-GB')
+  const timeString = formatTime(timeStamp)
+
+  return `${dateString} - ${timeString}`
+}

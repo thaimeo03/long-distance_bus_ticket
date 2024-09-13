@@ -50,3 +50,31 @@ export interface IBookingHistoryResponse {
   busName: string
   bookingDate: string
 }
+
+export interface IBookingInfoResponse {
+  id: string
+  quantity: number
+  seats: Array<{
+    id: string
+    seatNumber: number
+    isAvailable: boolean
+  }>
+  schedule: {
+    departureTime: string
+  }
+  user: {
+    email: string
+    fullName: string
+    phoneNumber: string
+    age: number
+  }
+  payment: {
+    amount: string
+  }
+  pickupStop: {
+    location: string
+  }
+  dropOffStop: {
+    location: string
+  }
+}

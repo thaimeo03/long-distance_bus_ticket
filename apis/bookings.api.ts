@@ -2,6 +2,7 @@ import api from './api'
 import { DataResponse, MessageResponse } from '@/common/interfaces/response.interface'
 import {
   IBookingHistoryResponse,
+  IBookingInfoResponse,
   ICancelBookingBody,
   ICreateBookingBody,
   ICreateBookingResponse
@@ -19,5 +20,10 @@ export const cancelBooking = async (body: ICancelBookingBody) => {
 
 export const getBookingHistory = async () => {
   const res = await api.get<DataResponse<IBookingHistoryResponse[]>>('/bookings/history')
+  return res.data
+}
+
+export const getBookingInfo = async (bookingId: string) => {
+  const res = await api.get<DataResponse<IBookingInfoResponse>>(`/bookings/${bookingId}`)
   return res.data
 }
