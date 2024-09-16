@@ -1,7 +1,7 @@
 'use client'
 import { Separator } from '@/components/ui/separator'
 import { BusFilterCheckbox, IBusFilterCheckBoxItemProps } from './bus-filter-checkbox'
-import { BusFilterRadioGroup, IBusFilterRadioItem } from './bus-filter-radio-group'
+import { IBusFilterRadioItem } from './bus-filter-radio-group'
 import { Moon, SunDim, Sunrise, Sunset } from 'lucide-react'
 import useScheduleStore from '@/stores/schedule.store'
 

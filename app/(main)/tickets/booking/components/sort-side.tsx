@@ -6,11 +6,34 @@ import { twMerge } from 'tailwind-merge'
 import BusSearch from './bus-search'
 import useScheduleStore from '@/stores/schedule.store'
 
-const sortBy = ['Thời gian đến', 'Thời gian đi', 'Giá vé', 'Chỗ trống']
+const sortBy = [
+  { content: 'Thời gian đi', value: 0 },
+  { content: 'Thời gian đến', value: 1 },
+  { content: 'Chỗ trống', value: 2 },
+  { content: 'Giá vé', value: 3 }
+]
 
 export default function SortSide() {
-  const { hasSearched, scheduleList } = useScheduleStore()
-  const [curSortBy, setCurSortBy] = useState(sortBy[0])
+  // Hooks
+  const { hasSearched, scheduleList, scheduleSearch, setScheduleSearch } = useScheduleStore()
+  const [curSortBy, setCurSortBy] = useState(sortBy[0].value)
+
+  // Handlers
+  const handleSortBy = (value: number) => {
+    setCurSortBy(value)
+    if (scheduleSearch?.query) {
+      setScheduleSearch({ body: { ...scheduleSearch.body, sortBy: value }, query: scheduleSearch.query })
+    }
+  }
+
+  const handleSortOrder = (value: 'asc' | 'desc') => {
+    if (scheduleSearch?.query) {
+      setScheduleSearch({
+        body: { ...scheduleSearch.body, sortOrder: value === 'asc' ? 0 : 1 },
+        query: scheduleSearch.query
+      })
+    }
+  }
 
   return (
     <div className='flex items-center'>
@@ -34,20 +57,21 @@ export default function SortSide() {
             <Button
               key={index}
               variant='outline'
-              onClick={() => setCurSortBy(item)}
+              value={item.value}
+              onClick={() => handleSortBy(item.value)}
               className={twMerge(
                 'h-6 font-normal border border-primary hover:bg-primary hover:text-primary-foreground',
-                curSortBy === item && 'bg-primary text-primary-foreground'
+                curSortBy === item.value && 'bg-primary text-primary-foreground'
               )}
             >
-              {item}
+              {item.content}
             </Button>
           ))}
         </div>
       </div>
 
       <div className='ml-8'>
-        <Select defaultValue='desc'>
+        <Select defaultValue='desc' onValueChange={handleSortOrder}>
           <SelectTrigger className='w-[120px] h-6'>
             <SelectValue placeholder='Sắp xếp' />
           </SelectTrigger>

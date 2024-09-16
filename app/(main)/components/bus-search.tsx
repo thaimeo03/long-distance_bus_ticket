@@ -8,16 +8,13 @@ import { ArrowRightLeft, BusFront, BusIcon, CalendarIcon } from 'lucide-react'
 import { useRef, useState } from 'react'
 import SearchInput from './search-input'
 import useOutSideClick from '@/hooks/useOutSideClick'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { getAllRouteStops } from '@/apis/route-stops.api'
 import { IScheduleQuery } from '@/common/interfaces/schedules.interface'
-import { getAllAvailableSchedules } from '@/apis/schedules.api'
 import useScheduleStore from '@/stores/schedule.store'
 import { useRouter } from 'next/navigation'
-import { ROUTES } from '@/common/constants/routes.constant'
 import { useScheduleSearchForm } from '@/stores/local.store'
-import { ErrorResponse } from '@/common/interfaces/response.interface'
-import { useToast } from '@/hooks/use-toast'
+import { ROUTES } from '@/common/constants/routes.constant'
 
 export interface IForm {
   from: string
@@ -27,8 +24,7 @@ export interface IForm {
 export default function BusSearch({ children }: { children: React.ReactNode }) {
   // Initialize
   const router = useRouter()
-  const { toast } = useToast()
-  const { setScheduleList, setHasSearched } = useScheduleStore()
+  const { setScheduleSearch, scheduleSearch } = useScheduleStore()
   const { setForm: setScheduleSearchForm } = useScheduleSearchForm()
 
   // Handle outside click
@@ -51,25 +47,6 @@ export default function BusSearch({ children }: { children: React.ReactNode }) {
 
   const locations = routeStops?.data.map((stop) => stop.location) || []
 
-  const searchMutation = useMutation({
-    mutationKey: ['schedule-search'],
-    mutationFn: (query: IScheduleQuery) => getAllAvailableSchedules(query),
-    onSuccess: (data) => {
-      setHasSearched(true)
-      setScheduleList(data.data)
-      setForm({ from: '', to: '' })
-      setDate(undefined)
-      // Redirect
-      router.push(ROUTES.tickets_booking.path)
-    },
-    onError: (error: ErrorResponse) => {
-      toast({
-        title: (error.response?.data?.message as string) || error.message,
-        variant: 'destructive'
-      })
-    }
-  })
-
   // function handler
   const handleExchange = () => {
     setForm((prev) => ({ ...prev, from: form.to, to: form.from }))
@@ -85,8 +62,10 @@ export default function BusSearch({ children }: { children: React.ReactNode }) {
       departureDate: date
     }
 
-    searchMutation.mutate(query)
     setScheduleSearchForm(query)
+    setScheduleSearch({ query, body: scheduleSearch?.body })
+
+    router.push(ROUTES.tickets_booking.path)
   }
 
   return (

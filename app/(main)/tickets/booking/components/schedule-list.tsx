@@ -2,12 +2,15 @@
 import { Progress } from '@/components/ui/progress'
 import { FireExtinguisher, Milk, Plug, WifiHigh } from 'lucide-react'
 import BusServiceTabs from './bus-services-tab'
-import useBusStore from '@/stores/schedule.store'
+import useScheduleStore from '@/stores/schedule.store'
 import BookingSheet from './booking-sheet'
 import { IAvailableScheduleResponse } from '@/common/interfaces/schedules.interface'
 import { formatDurationHoursTime, formatMoney, formatTime } from '@/lib/utils'
-import useBookingInfoStore from '@/stores/booking.store'
+import { useQuery } from '@tanstack/react-query'
+import { getAllAvailableSchedules } from '@/apis/schedules.api'
 import { useEffect } from 'react'
+import { useToast } from '@/hooks/use-toast'
+import { ErrorResponse } from '@/common/interfaces/response.interface'
 
 export interface IScheduleItem {
   companyImage: string
@@ -34,13 +37,35 @@ interface IArrivalInfo {
 }
 
 export default function ScheduleList() {
-  const { hasSearched, scheduleList } = useBusStore()
+  // Hooks
+  const { toast } = useToast()
+  const { scheduleSearch, setHasSearched, setScheduleList } = useScheduleStore()
 
-  if (!hasSearched || !scheduleList) return null
+  // Queries
+  const { data, isSuccess, isError, error } = useQuery({
+    queryKey: ['schedule-list', scheduleSearch],
+    queryFn: () =>
+      scheduleSearch && getAllAvailableSchedules({ query: scheduleSearch.query, body: scheduleSearch?.body }),
+    enabled: !!scheduleSearch?.query
+  })
+
+  useEffect(() => {
+    if (isSuccess) {
+      setHasSearched(true)
+      setScheduleList(data?.data as IAvailableScheduleResponse[])
+    }
+
+    if (isError) {
+      toast({
+        title: ((error as ErrorResponse).response?.data.message as string) || error.message,
+        variant: 'destructive'
+      })
+    }
+  }, [isSuccess, isError])
 
   return (
     <div className='mt-10 flex flex-col gap-5'>
-      {scheduleList.map((item, index) => (
+      {data?.data.map((item, index) => (
         <ScheduleItem item={item} key={index} />
       ))}
     </div>
