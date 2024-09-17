@@ -41,7 +41,62 @@ export function BusFilterCheckbox({ checkBoxItems, listName, type }: IBusFilterC
   )
 }
 
-export function BusFilterCheckBoxItem({ id, children }: IBusFilterCheckBoxItemProps) {
+export function BusFilterCheckBoxItem({ id, children, value, type }: IBusFilterCheckBoxItemProps) {
+  const { scheduleSearch, setScheduleSearch } = useScheduleStore()
+
+  const handleChange = (checked: CheckedState, value: ICheckBoxValue | string) => {
+    if (scheduleSearch?.query) {
+      switch (type) {
+        case 'departure':
+          let periodDepartures: { startTime: number; endTime: number }[] | undefined = [
+            ...(scheduleSearch?.body?.periodDepartures || [])
+          ]
+          if (checked) {
+            periodDepartures = [...periodDepartures, value as ICheckBoxValue]
+          } else {
+            periodDepartures = periodDepartures.filter((item) => item.startTime !== (value as ICheckBoxValue).startTime)
+          }
+          if (periodDepartures.length === 0) periodDepartures = undefined
+
+          setScheduleSearch({
+            body: { ...scheduleSearch.body, periodDepartures },
+            query: scheduleSearch.query
+          })
+          break
+        case 'arrival':
+          let periodArrivals: { startTime: number; endTime: number }[] | undefined = [
+            ...(scheduleSearch?.body?.periodArrivals || [])
+          ]
+          if (checked) {
+            periodArrivals = [...periodArrivals, value as any]
+          } else {
+            periodArrivals = periodArrivals.filter((item) => item.startTime !== (value as ICheckBoxValue).startTime)
+          }
+          if (periodArrivals.length === 0) periodArrivals = undefined
+
+          setScheduleSearch({
+            body: { ...scheduleSearch.body, periodArrivals },
+            query: scheduleSearch.query
+          })
+          break
+        case 'bus-company':
+          let companyIds = scheduleSearch.body?.companyIds
+          if (checked) {
+            companyIds = [...(companyIds || []), value as string]
+          } else {
+            companyIds = companyIds?.filter((item) => item !== value)
+          }
+          if (companyIds?.length === 0) companyIds = undefined
+
+          setScheduleSearch({
+            body: { ...scheduleSearch.body, companyIds },
+            query: scheduleSearch.query
+          })
+          break
+      }
+    }
+  }
+
   return (
     <div className='flex items-center space-x-2 cursor-pointer'>
       <Checkbox onCheckedChange={(e) => handleChange(e, value)} id={id} value={JSON.stringify(value)} />
