@@ -12,7 +12,8 @@ export interface IScheduleQuery {
 
 export interface IScheduleFilterBody {
   periodDepartures?: { startTime: number; endTime: number }[]
-  stopIds?: { startTime: number; endTime: number }[]
+  periodArrivals?: { startTime: number; endTime: number }[]
+  companyIds?: string[]
   sortBy?: ScheduleSortBy
   sortOrder?: ScheduleSortOrder
 }

@@ -16,7 +16,7 @@ const sortBy = [
 export default function SortSide() {
   // Hooks
   const { hasSearched, scheduleList, scheduleSearch, setScheduleSearch } = useScheduleStore()
-  const [curSortBy, setCurSortBy] = useState(sortBy[0].value)
+  const [curSortBy, setCurSortBy] = useState<number | null>(null)
 
   // Handlers
   const handleSortBy = (value: number) => {

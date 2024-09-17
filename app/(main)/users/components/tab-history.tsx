@@ -32,7 +32,7 @@ export default function TabHistory() {
                 <TableHead>Điểm trả</TableHead>
                 <TableHead>Thời gian khởi hành</TableHead>
                 <TableHead>Ngày đặt</TableHead>
-                <TableHead>Thành tiền</TableHead>
+                <TableHead className='w-[120px]'>Thành tiền</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
