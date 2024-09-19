@@ -15,6 +15,7 @@ export interface ILoginBody {
 }
 
 export interface IProfileResponse {
+  id: string
   email: string
   fullName: string
   phoneNumber: string
@@ -40,4 +41,8 @@ export interface IUpdateProfileBody {
   fullName?: string
   phoneNumber?: string
   age?: number
+}
+
+export interface IUpdateRoleBody {
+  role: Role
 }
