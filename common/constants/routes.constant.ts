@@ -34,5 +34,9 @@ export const ROUTES = {
   google_auth: {
     path: `${process.env.NEXT_PUBLIC_HOST_URL}/auth/google`,
     name: 'Backend host'
+  },
+  admin: {
+    path: '/admin',
+    name: 'Trang quản trị'
   }
 } as const

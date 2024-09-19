@@ -1,6 +1,7 @@
 'use client'
 import { logoutUser } from '@/apis/users.api'
 import { ROUTES } from '@/common/constants/routes.constant'
+import { Role } from '@/common/enums/users.enum'
 import { ErrorResponse } from '@/common/interfaces/response.interface'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
@@ -12,7 +13,7 @@ import Link from 'next/link'
 
 export default function UserMenuItem() {
   const { toast } = useToast()
-  const { isAuth, setIsAuth, setUserInfo } = useUserStore()
+  const { isAuth, userInfo, setIsAuth, setUserInfo } = useUserStore()
 
   const logoutMutation = useMutation({
     mutationFn: () => logoutUser(),
@@ -48,20 +49,25 @@ export default function UserMenuItem() {
       </PopoverTrigger>
       <PopoverContent className='w-fit font-medium'>
         {!isAuth ? (
-          <div className='flex flex-col gap-1'>
+          <div className='flex flex-col gap-1 space-y-1'>
             <Link href={ROUTES.login.path} className='text-sm hover:text-primary'>
               {ROUTES.login.name}
             </Link>
-            <Link href={ROUTES.register.path} className='text-sm mt-2 hover:text-primary'>
+            <Link href={ROUTES.register.path} className='text-sm hover:text-primary'>
               {ROUTES.register.name}
             </Link>
           </div>
         ) : (
-          <div className='flex flex-col gap-1'>
+          <div className='flex flex-col gap-1 space-y-1'>
+            {userInfo?.role === Role.Admin && (
+              <Link href={ROUTES.admin.path} className='text-sm hover:text-primary'>
+                {ROUTES.admin.name}
+              </Link>
+            )}
             <Link href={ROUTES.users.path} className='text-sm hover:text-primary'>
               {ROUTES.users.name}
             </Link>
-            <div onClick={handleLogout} className='text-sm mt-2 hover:text-primary cursor-pointer'>
+            <div onClick={handleLogout} className='text-sm hover:text-primary cursor-pointer'>
               {ROUTES.logout.name}
             </div>
           </div>
