@@ -38,5 +38,13 @@ export const ROUTES = {
   admin: {
     path: '/admin',
     name: 'Trang quản trị'
+  },
+  forgot_password: {
+    path: '/forgot-password',
+    name: 'Quên mật khẩu'
+  },
+  forgot_password_otp: {
+    path: '/forgot-password/otp',
+    name: 'OTP quên mật khẩu'
   }
 } as const

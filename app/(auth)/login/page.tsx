@@ -64,11 +64,17 @@ export default function Login() {
         </div>
         <div className='relative grid gap-2'>
           <div className='flex items-center'>
-            <Label htmlFor='password'>Mật khẩu</Label>
+            <div className='flex justify-between w-full'>
+              <Label htmlFor='password'>Mật khẩu</Label>
+              <Link href={ROUTES.forgot_password.path} className='text-xs underline text-right hover:text-red-500'>
+                {ROUTES.forgot_password.name}
+              </Link>
+            </div>
             <span className='absolute -bottom-4 text-xs text-red-600'>{errors.password?.message}</span>
           </div>
           <Input id='password' type='password' {...register('password')} />
         </div>
+
         <Button type='submit' disabled={loginMutation.isPending} className='w-full'>
           {loginMutation.isPending && <Spinner className='mr-1' />}
           Đăng nhập
