@@ -46,5 +46,9 @@ export const ROUTES = {
   forgot_password_otp: {
     path: '/forgot-password/otp',
     name: 'OTP quên mật khẩu'
+  },
+  forgot_password_reset: {
+    path: '/forgot-password/reset',
+    name: 'Đặt mật khẩu mới'
   }
 } as const

@@ -46,3 +46,21 @@ export interface IUpdateProfileBody {
 export interface IUpdateRoleBody {
   role: Role
 }
+
+export interface IForgotPasswordBody {
+  email: string
+}
+
+export interface IForgotPasswordResponse {
+  TTL: number
+}
+
+export interface IVerifyForgotPasswordOTPBody {
+  email: string
+  OTP: string
+}
+
+export interface IResetPasswordBody {
+  email: string
+  newPassword: string
+}

@@ -21,3 +21,15 @@ export const IUpdateProfileSchema = yup.object({
   phoneNumber: yup.string().min(10, 'Số điện thoại phải có độ dài 10 ký tự'),
   age: yup.number().min(1, 'Vui lòng điền đầy đủ tuổi').max(100, 'Vui lòng điền đầy đủ tuổi')
 } as const)
+
+export const IForgotPasswordSchema = yup.object({
+  email: yup.string().email('Email không hợp lệ').required('Vui lòng điền email')
+})
+
+export const IResetPasswordSchema = yup.object({
+  newPassword: yup.string().min(6, 'Mãt khẩu phải có ít nhất 6 ký tự').required('Vui lòng nhập mật khẩu'),
+  confirmNewPassword: yup
+    .string()
+    .oneOf([yup.ref('newPassword')], 'Mật khẩu không trùng nhau')
+    .required('Vui lòng xác nhận mật khẩu')
+})
