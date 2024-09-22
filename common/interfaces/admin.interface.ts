@@ -9,3 +9,8 @@ export interface IRevenueInWeekAnalysisResponse {
   week: string
   totalAmount: string
 }
+
+export interface IRouteAnalysisResponse {
+  route: string
+  count: string
+}

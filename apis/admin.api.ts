@@ -1,7 +1,11 @@
 import { IProfileResponse, IUpdateRoleBody } from '@/common/interfaces/users.interface'
 import api from './api'
 import { DataResponse, MessageResponse } from '@/common/interfaces/response.interface'
-import { IRevenueInMonthAnalysisResponse, IRevenueInWeekAnalysisResponse } from '@/common/interfaces/admin.interface'
+import {
+  IRevenueInMonthAnalysisResponse,
+  IRevenueInWeekAnalysisResponse,
+  IRouteAnalysisResponse
+} from '@/common/interfaces/admin.interface'
 
 export const getAllUsersInfo = async () => {
   const res = await api.get<DataResponse<IProfileResponse[]>>('/admin/users')
@@ -24,5 +28,10 @@ export const getRevenueOfCompanyInWeekAnalysis = async (companyId: string) => {
   const res = await api.get<DataResponse<IRevenueInWeekAnalysisResponse[]>>(
     `/admin/report/analyze-company-bus-in-week/${companyId}`
   )
+  return res.data
+}
+
+export const getRouteAnalysis = async () => {
+  const res = await api.get<DataResponse<IRouteAnalysisResponse[]>>('/admin/report/analyze-by-route')
   return res.data
 }
