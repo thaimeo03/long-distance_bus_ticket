@@ -5,11 +5,9 @@ import { Button } from '@/components/ui/button'
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { getBusCompanies } from '@/apis/bus-company.api'
-import { useToast } from '@/hooks/use-toast'
 import { useRouter } from 'next/navigation'
 
 const HOST = process.env.NEXT_PUBLIC_HOST_URL
-console.log(HOST)
 
 export default function ExportTabContent() {
   // States
@@ -18,7 +16,6 @@ export default function ExportTabContent() {
   const [selectedReportType, setSelectedReportType] = useState('')
 
   // Hooks
-  const { toast } = useToast()
   const { data: busCompaniesData } = useQuery({
     queryKey: ['bus-companies'],
     queryFn: getBusCompanies
