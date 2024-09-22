@@ -2,6 +2,7 @@ import { IProfileResponse, IUpdateRoleBody } from '@/common/interfaces/users.int
 import api from './api'
 import { DataResponse, MessageResponse } from '@/common/interfaces/response.interface'
 import {
+  IDepartureTimeAnalysisResponse,
   IRevenueInMonthAnalysisResponse,
   IRevenueInWeekAnalysisResponse,
   IRouteAnalysisResponse
@@ -33,5 +34,25 @@ export const getRevenueOfCompanyInWeekAnalysis = async (companyId: string) => {
 
 export const getRouteAnalysis = async () => {
   const res = await api.get<DataResponse<IRouteAnalysisResponse[]>>('/admin/report/analyze-by-route')
+  return res.data
+}
+
+export const getDepartureTimeAnalysis = async () => {
+  const res = await api.get<DataResponse<IDepartureTimeAnalysisResponse[]>>(
+    '/admin/report/analyze-bus-departure-by-time-slot'
+  )
+  return res.data
+}
+
+export const getExportAnalyzeReportCompanyBusInWeek = async (companyId: string) => {
+  const res = await api.get(`/admin/report/export-analyze-report-company-bus-in-week/${companyId}`, {
+    responseType: 'blob'
+  })
+
+  return res.data
+}
+
+export const getExportAnalyzeReportCompanyBusInMonth = async (companyId: string) => {
+  const res = await api.get(`/admin/report/export-analyze-report-company-bus-in-month/${companyId}`)
   return res.data
 }

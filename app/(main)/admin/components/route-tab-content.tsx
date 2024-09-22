@@ -19,7 +19,7 @@ interface IRouteRenderData {
   count: number
 }
 
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#82ca9d', '#808080']
+const COLORS = ['#0088FE', '#f4a26c', '#FFBB28', '#FF8042', '#8b6cf4', '#82ca9d', '#c3c6c5']
 
 export default function RouteTabContent() {
   // States

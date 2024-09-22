@@ -14,3 +14,8 @@ export interface IRouteAnalysisResponse {
   route: string
   count: string
 }
+
+export interface IDepartureTimeAnalysisResponse {
+  timeslot: string
+  departurecount: string
+}
