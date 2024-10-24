@@ -13,8 +13,12 @@ export const getAllAvailableSchedules = async ({
   query: IScheduleQuery
   body?: IScheduleFilterBody
 }) => {
+  console.log({ query, body })
   const res = await api.post<DataResponse<IAvailableScheduleResponse[]>>('/schedules/find', body, {
-    params: query
+    params: {
+      ...query,
+      departureDate: new Date((query.departureDate as Date).getTime() + 7 * 60 * 60 * 1000)
+    }
   })
   return res.data
 }

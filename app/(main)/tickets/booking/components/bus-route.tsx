@@ -1,5 +1,4 @@
 'use client'
-import { Button } from '@/components/ui/button'
 import { useScheduleSearchForm } from '@/stores/local.store'
 import useScheduleStore from '@/stores/schedule.store'
 import { formatDate } from 'date-fns'
@@ -19,12 +18,6 @@ export default function BusRoute() {
       <span className='px-2 border-l border-x border-x-foreground text-sm font-semibold'>
         {form.departureDate && formatDate(form.departureDate, 'dd/MM/yyyy')}
       </span>
-      <Button
-        variant='outline'
-        className='max-h-8 py-0 px-8 bg-red-500 text-primary-foreground hover:bg-red-600 hover:text-primary-foreground'
-      >
-        Thay đổi
-      </Button>
     </div>
   )
 }

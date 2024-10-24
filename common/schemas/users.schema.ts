@@ -1,9 +1,17 @@
 import * as yup from 'yup'
+import { IUpdateProfileBody } from '../interfaces/users.interface'
 
 export const IRegisterSchema = yup.object({
-  fullName: yup.string().required('Vui lòng nhập họ và tên'),
+  fullName: yup
+    .string()
+    .min(3, 'Họ tên phải có độ dài lớn hơn 3 ký tự')
+    .matches(/^[\p{L} ]+$/u, { message: 'Họ tên không chứa số và ký tự đặc biệt' })
+    .required('Vui lòng nhập họ và tên'),
   email: yup.string().email('Email không hợp lệ').required('Vui lòng nhập email'),
-  phoneNumber: yup.string().min(10, 'Số điện thoại phải có độ dài 10 ký tự').required('Vui lòng nhập số điện thoại'),
+  phoneNumber: yup
+    .string()
+    .matches(/^[0-9]{10}$/, 'Số điện thoại phải có độ dài 10 ký tự và chỉ chứa số')
+    .required('Vui lòng nhập số điện thoại'),
   password: yup.string().min(6, 'Mãt khẩu phải có ít nhất 6 ký tự').required('Vui lòng nhập mật khẩu'),
   confirmPassword: yup
     .string()
@@ -16,9 +24,16 @@ export const ILoginSchema = yup.object({
   password: yup.string().min(6, 'Mãt khẩu phải có ít nhất 6 ký tự').required('Vui lòng nhập mật khẩu')
 })
 
-export const IUpdateProfileSchema = yup.object({
-  fullName: yup.string().min(3, 'Họ tên phải có độ dài lớn hơn 3 ký tự'),
-  phoneNumber: yup.string().min(10, 'Số điện thoại phải có độ dài 10 ký tự'),
+export const IUpdateProfileSchema = yup.object<IUpdateProfileBody>({
+  fullName: yup
+    .string()
+    .min(3, 'Họ tên phải có độ dài lớn hơn 3 ký tự')
+    .matches(/^[\p{L} ]+$/u, { message: 'Họ tên không chứa số và ký tự đặc biệt' })
+    .required('Vui lòng nhập họ và tên'),
+  phoneNumber: yup
+    .string()
+    .matches(/^[0-9]{10}$/, 'Số điện thoại phải có độ dài 10 ký tự và chỉ chứa số')
+    .required('Vui lòng nhập số điện thoại'),
   age: yup.number().min(1, 'Vui lòng điền đầy đủ tuổi').max(100, 'Vui lòng điền đầy đủ tuổi')
 } as const)
 

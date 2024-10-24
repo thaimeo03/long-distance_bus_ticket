@@ -68,8 +68,8 @@ export default function TabAccount() {
             </div>
             <div className='relative'>
               <Label htmlFor='age'>Tuổi</Label>
-              <Input id='age' {...register('age')} type='number' className='w-[100px]' />
-              <span className='absolute -bottom-4 text-xs text-red-600'>{errors.age?.message}</span>
+              <Input id='age' {...register('age')} type='number' className='w-[150px]' />
+              <span className='absolute -bottom-4 text-xs text-red-600 line-clamp-1'>{errors.age?.message}</span>
             </div>
           </div>
           <div className='flex space-x-4'>
@@ -85,8 +85,8 @@ export default function TabAccount() {
             </div>
             <div className='relative'>
               <Label htmlFor='phoneNumber'>Số điện thoại</Label>
-              <Input id='phoneNumber' {...register('phoneNumber')} placeholder='0123456789' />
-              <span className='absolute -bottom-4 text-xs text-red-600'>{errors.phoneNumber?.message}</span>
+              <Input id='phoneNumber' {...register('phoneNumber')} placeholder='0123456789' className='w-[250px]' />
+              <span className='absolute -bottom-9 text-xs text-red-600'>{errors.phoneNumber?.message}</span>
             </div>
           </div>
           <Button type='submit' disabled={updateProfileMutation.isPending}>

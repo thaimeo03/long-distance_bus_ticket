@@ -81,7 +81,7 @@ export default function BusFilterSide() {
 
       <Separator className='mt-5 bg-primary' />
 
-      <BusFilterCheckbox checkBoxItems={checkBoxItems} listName='Giờ dến' type='arrival' />
+      <BusFilterCheckbox checkBoxItems={checkBoxItems} listName='Giờ đến' type='arrival' />
       {/* <BusFilterRadioGroup radioItems={radioArrivalItems} listName='Điểm trả' type='arrival' /> */}
 
       <Separator className='mt-5 bg-primary' />
