@@ -17,3 +17,9 @@ export interface IRouteStopWithNextPrice {
   arrivalTime: string
   priceToNextStop: number | null
 }
+
+export interface ICreateRouteStopBody {
+  location: string
+  distanceFromStartKm: number
+  arrivalTime: string
+}

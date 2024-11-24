@@ -1,12 +1,15 @@
+'use client'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import RouteDetails from './route-details'
-import { IRouteDetails } from '@/common/interfaces/routes.interface'
+import { useQuery } from '@tanstack/react-query'
+import { getAllRouteDetails } from '@/apis/route.api'
 
-interface RouteTableProps {
-  routes: IRouteDetails[]
-}
+export default function RouteTable() {
+  const { data } = useQuery({
+    queryKey: ['all-route-details'],
+    queryFn: getAllRouteDetails
+  })
 
-export default function RouteTable({ routes }: RouteTableProps) {
   return (
     <Table>
       <TableHeader>
@@ -19,7 +22,7 @@ export default function RouteTable({ routes }: RouteTableProps) {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {routes.map((route) => (
+        {(data?.data || []).map((route) => (
           <TableRow key={route.id}>
             <TableCell>{route.startLocation}</TableCell>
             <TableCell>{route.endLocation}</TableCell>
