@@ -1,5 +1,5 @@
 import { IPrice } from './prices.interface'
-import { IRouteStop } from './route-stops.interface'
+import { IRouteStop, IRouteStopWithNextPrice } from './route-stops.interface'
 
 export interface IRoute {
   id: string
@@ -9,4 +9,8 @@ export interface IRoute {
   durationHours: number
   routeStops: IRouteStop[]
   prices: IPrice[]
+}
+
+export interface IRouteDetails extends Omit<IRoute, 'routeStops' | 'prices'> {
+  routeStops: IRouteStopWithNextPrice[]
 }
