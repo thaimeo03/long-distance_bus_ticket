@@ -1,5 +1,5 @@
 import { IRouteStopWithNextPrice } from '@/common/interfaces/route-stops.interface'
-import { formatMoney } from '@/lib/utils'
+import { formatMoney, formatTime } from '@/lib/utils'
 
 interface RouteGraphProps {
   stops: IRouteStopWithNextPrice[]
@@ -45,8 +45,8 @@ export default function RouteGraph({ stops }: RouteGraphProps) {
             <text x={x + 5} y={lineY - 30} fontSize='12' textAnchor='middle'>
               {stop.location}
             </text>
-            <text x={x + 20} y={lineY + 25} textAnchor='middle' fontSize='10'>
-              {new Date(stop.arrivalTime).toLocaleTimeString()}
+            <text x={x} y={lineY + 25} textAnchor='middle' fontSize='10'>
+              {formatTime(stop.arrivalTime)}
             </text>
           </g>
         )

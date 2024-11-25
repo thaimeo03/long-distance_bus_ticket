@@ -24,8 +24,8 @@ export default function AddRouteForm() {
       distanceKm: 0,
       durationHours: 0,
       routeStops: [
-        { location: '', distanceFromStartKm: 0, arrivalTime: '' },
-        { location: '', distanceFromStartKm: 0, arrivalTime: '' }
+        { location: '', distanceFromStartKm: undefined, arrivalTime: '' },
+        { location: '', distanceFromStartKm: undefined, arrivalTime: '' }
       ]
     }
   })
@@ -69,37 +69,37 @@ export default function AddRouteForm() {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button>Add New Route</Button>
+        <Button>Thêm chi tiết tuyến đường</Button>
       </DialogTrigger>
       <DialogContent className='sm:max-w-[600px] h-[80vh] flex flex-col' aria-description='Add New Route Details'>
         <DialogHeader>
-          <DialogTitle>Add New Route</DialogTitle>
+          <DialogTitle>Chi tiết tuyến đường</DialogTitle>
         </DialogHeader>
         <ScrollArea className='flex-grow pr-4'>
           <form onSubmit={handleSubmit(handleSubmitRouteDetailsForm)} className='space-y-4 px-2'>
             <div>
-              <Label htmlFor='startLocation'>Start Location</Label>
+              <Label htmlFor='startLocation'>Điểm đầu</Label>
               <Input id='startLocation' {...register('startLocation')} required />
             </div>
             <div>
-              <Label htmlFor='endLocation'>End Location</Label>
+              <Label htmlFor='endLocation'>Điểm cuối</Label>
               <Input id='endLocation' {...register('endLocation')} required />
             </div>
             <div>
-              <Label htmlFor='distanceKm'>Distance (km)</Label>
+              <Label htmlFor='distanceKm'>Khoảng cách (km)</Label>
               <Input id='distanceKm' type='number' {...register('distanceKm', { valueAsNumber: true })} required />
             </div>
             <div>
-              <Label htmlFor='durationHours'>Duration (hours)</Label>
+              <Label htmlFor='durationHours'>Khoảng thời gian (giờ)</Label>
               <Input id='durationHours' {...register('durationHours', { valueAsNumber: true })} required />
             </div>
             <div className='space-y-2'>
-              <Label>Route Stops</Label>
+              <Label>Các điểm dừng</Label>
 
               {routeStops.map((_, index) => (
                 <div key={index} className='space-y-2 border-t pt-4'>
                   <div className='flex justify-between items-center'>
-                    <Label>Stop {index + 1}</Label>
+                    <Label>Điểm dừng {index + 1}</Label>
                     {index > 1 && (
                       <Button
                         type='button'
@@ -112,22 +112,27 @@ export default function AddRouteForm() {
                       </Button>
                     )}
                   </div>
-                  <Input placeholder='Location' {...register(`routeStops.${index}.location`)} required />
+                  <Input placeholder='Địa điểm' {...register(`routeStops.${index}.location`)} required />
                   <Input
                     type='number'
-                    placeholder='Distance from start (km)'
+                    placeholder='Khoảng cách từ điểm xuất phát (km)'
                     {...register(`routeStops.${index}.distanceFromStartKm`, { valueAsNumber: true })}
                     required
                   />
-                  <Input type='datetime-local' {...register(`routeStops.${index}.arrivalTime`)} required />
+                  <div className='relative w-3/5'>
+                    <span className='absolute right-4 top-1/2 -translate-y-1/2 text-sm text-muted-foreground select-none'>
+                      Thời gian đến
+                    </span>
+                    <Input type='datetime-local' {...register(`routeStops.${index}.arrivalTime`)} required />
+                  </div>
                 </div>
               ))}
               <Button type='button' variant='outline' onClick={handleAddStop} className='w-full'>
-                <Plus className='h-4 w-4 mr-2' /> Add Stop
+                <Plus className='h-4 w-4 mr-2' /> Thêm điểm dừng
               </Button>
             </div>
             <Button type='submit' className='w-full'>
-              Add Route
+              Thêm mới
             </Button>
           </form>
         </ScrollArea>

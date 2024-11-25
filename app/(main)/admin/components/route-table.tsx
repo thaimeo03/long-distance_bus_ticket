@@ -14,11 +14,11 @@ export default function RouteTable() {
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>Start Location</TableHead>
-          <TableHead>End Location</TableHead>
-          <TableHead>Distance (km)</TableHead>
-          <TableHead>Duration (hours)</TableHead>
-          <TableHead>View Route</TableHead>
+          <TableHead>Điểm đầu</TableHead>
+          <TableHead>Điểm cuối</TableHead>
+          <TableHead>Khoảng cách (km)</TableHead>
+          <TableHead>Khoảng thời gian (giờ)</TableHead>
+          <TableHead>Hành động</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>

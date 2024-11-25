@@ -10,7 +10,7 @@ export default function RouteDetailsTabContent() {
         <CardDescription>Phân tích doanh thu theo tháng, tuần và công ty</CardDescription>
       </CardHeader>
       <CardContent>
-        <div>
+        <div className='mb-2'>
           <AddRouteForm />
         </div>
         <RouteTable />
