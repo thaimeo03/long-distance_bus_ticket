@@ -4,6 +4,7 @@ import RevenueTabContent from './components/revenue-tab-content'
 import RouteTabContent from './components/route-tab-content'
 import TimeFrameTabContent from './components/time-frame-tab-content'
 import ExportTabContent from './components/export-tab-content'
+import RouteDetailsTabContent from './components/route-details-tab-content'
 
 export default function BusTicketDashboard() {
   return (
@@ -16,6 +17,7 @@ export default function BusTicketDashboard() {
           <TabsTrigger value='routes'>Phân Tích Tuyến Đường</TabsTrigger>
           <TabsTrigger value='timeframes'>Phân Tích Khung Giờ</TabsTrigger>
           <TabsTrigger value='export'>Xuất Báo Cáo</TabsTrigger>
+          <TabsTrigger value='route-details'>Chi tiết tuyến đường</TabsTrigger>
         </TabsList>
 
         <TabsContent value='users'>
@@ -36,6 +38,10 @@ export default function BusTicketDashboard() {
 
         <TabsContent value='export'>
           <ExportTabContent />
+        </TabsContent>
+
+        <TabsContent value='route-details'>
+          <RouteDetailsTabContent />
         </TabsContent>
       </Tabs>
     </div>
