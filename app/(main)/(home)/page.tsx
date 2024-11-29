@@ -24,11 +24,11 @@ export default function Home() {
         </BusSearch>
         <Promotion />
       </div>
-      <Partner />
+      {/* <Partner />
       <Spotlight />
       <AppInstall />
       <Intro />
-      <Questions />
+      <Questions /> */}
     </main>
   )
 }
