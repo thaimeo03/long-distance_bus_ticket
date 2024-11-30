@@ -1,6 +1,8 @@
 'use client'
 
 import { usePathname } from 'next/navigation'
+import Banner from '@/public/images/vnmBannerNew.webp'
+import Image from 'next/image'
 
 export default function Thumbnail() {
   const pathname = usePathname()
@@ -9,11 +11,7 @@ export default function Thumbnail() {
 
   return (
     <div>
-      <img
-        src='https://s3.rdbuz.com/web/images/vnm/vnmBannerNew.webp'
-        alt='thumb'
-        className='absolute w-full h-[520px] object-fill'
-      />
+      <Image src={Banner} alt='thumb' className='absolute w-full h-[520px] object-fill' />
     </div>
   )
 }

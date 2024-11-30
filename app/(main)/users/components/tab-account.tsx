@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useToast } from '@/hooks/use-toast'
+import useBookingInfoStore from '@/stores/booking.store'
 import useUserStore from '@/stores/user.store'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useMutation } from '@tanstack/react-query'
@@ -17,10 +18,12 @@ export default function TabAccount() {
   // Hooks
   const { toast } = useToast()
   const { userInfo } = useUserStore()
+  const { bookingInfo, setBookingInfo } = useBookingInfoStore()
 
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors }
   } = useForm<IUpdateProfileBody>({
     resolver: yupResolver(IUpdateProfileSchema),
@@ -35,8 +38,15 @@ export default function TabAccount() {
   const updateProfileMutation = useMutation({
     mutationFn: (body: IUpdateProfileBody) => updateProfile(body),
     onSuccess: (data) => {
+      setBookingInfo({
+        ...bookingInfo,
+        fullName: watch('fullName') as string,
+        age: watch('age') as number,
+        phoneNumber: watch('phoneNumber') as string
+      })
+
       toast({
-        title: 'Cập nhật thành công'
+        title: 'Cập nhật thành công'
       })
     },
     onError: (error: ErrorResponse) => {
