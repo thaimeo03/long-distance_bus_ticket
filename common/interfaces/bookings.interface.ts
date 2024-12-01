@@ -78,3 +78,8 @@ export interface IBookingInfoResponse {
     location: string
   }
 }
+
+export interface ICancelForm {
+  ticketCode: string
+  email: string
+}

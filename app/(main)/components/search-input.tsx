@@ -19,7 +19,12 @@ export default function SearchInput({ label, id, value, setForm, data }: ISearch
   const [suggestionData, setSuggestionData] = useState<string[]>([])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm((prev) => ({ ...prev, [id]: e.target.value }))
+    const specialCharacterPattern = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/
+
+    if (e.target.value.length === 0 || !specialCharacterPattern.test(e.target.value)) {
+      setForm((prev) => ({ ...prev, [id]: e.target.value }))
+    }
+
     setSuggestionData(data.filter((item) => item.toLowerCase().includes(e.target.value.toLowerCase())))
 
     if (suggestionData.length === 0) setSuggestion('')
