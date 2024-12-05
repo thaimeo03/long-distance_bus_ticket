@@ -12,12 +12,21 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { createRouteDetails } from '@/apis/route.api'
 import { ErrorResponse } from '@/common/interfaces/response.interface'
 import { toast } from '@/hooks/use-toast'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { ICreateRouteDetailsSchema } from '@/common/schemas/routes.schema'
 
 export default function AddRouteForm() {
   // Hooks
   const [isOpen, setIsOpen] = useState(false)
 
-  const { register, setValue, watch, reset, handleSubmit } = useForm<ICreateRouteDetailsBody>({
+  const {
+    register,
+    setValue,
+    watch,
+    reset,
+    handleSubmit,
+    formState: { errors }
+  } = useForm<ICreateRouteDetailsBody>({
     defaultValues: {
       startLocation: '',
       endLocation: '',
@@ -27,7 +36,8 @@ export default function AddRouteForm() {
         { location: '', distanceFromStartKm: undefined, arrivalTime: '' },
         { location: '', distanceFromStartKm: undefined, arrivalTime: '' }
       ]
-    }
+    },
+    resolver: yupResolver(ICreateRouteDetailsSchema)
   })
 
   const queryClient = useQueryClient()
@@ -77,21 +87,25 @@ export default function AddRouteForm() {
         </DialogHeader>
         <ScrollArea className='flex-grow pr-4'>
           <form onSubmit={handleSubmit(handleSubmitRouteDetailsForm)} className='space-y-4 px-2'>
-            <div>
+            <div className='relative'>
               <Label htmlFor='startLocation'>Điểm đầu</Label>
               <Input id='startLocation' {...register('startLocation')} required />
+              <span className='absolute -bottom-4 text-xs text-red-600'>{errors.startLocation?.message}</span>
             </div>
-            <div>
+            <div className='relative'>
               <Label htmlFor='endLocation'>Điểm cuối</Label>
               <Input id='endLocation' {...register('endLocation')} required />
+              <span className='absolute -bottom-4 text-xs text-red-600'>{errors.endLocation?.message}</span>
             </div>
-            <div>
+            <div className='relative'>
               <Label htmlFor='distanceKm'>Khoảng cách (km)</Label>
               <Input id='distanceKm' type='number' {...register('distanceKm', { valueAsNumber: true })} required />
+              <span className='absolute -bottom-4 text-xs text-red-600'>{errors.distanceKm?.message}</span>
             </div>
-            <div>
+            <div className='relative'>
               <Label htmlFor='durationHours'>Khoảng thời gian (giờ)</Label>
-              <Input id='durationHours' {...register('durationHours', { valueAsNumber: true })} required />
+              <Input id='durationHours' type='text' {...register('durationHours', { valueAsNumber: true })} required />
+              <span className='absolute -bottom-4 text-xs text-red-600'>{errors.durationHours?.message}</span>
             </div>
             <div className='space-y-2'>
               <Label>Các điểm dừng</Label>
