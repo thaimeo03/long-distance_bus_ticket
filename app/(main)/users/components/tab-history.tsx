@@ -16,8 +16,8 @@ export default function TabHistory() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Lịch sử mua vé</CardTitle>
-        <CardDescription>Thông tin mua vé trước đây.</CardDescription>
+        <CardTitle>Lịch sử đặt vé</CardTitle>
+        <CardDescription>Thông tin đặt vé trước đây.</CardDescription>
       </CardHeader>
       <CardContent className='space-y-2'>
         <div className='container mx-auto'>
@@ -33,6 +33,7 @@ export default function TabHistory() {
                 <TableHead>Thời gian khởi hành</TableHead>
                 <TableHead>Ngày đặt</TableHead>
                 <TableHead className='w-[120px]'>Thành tiền</TableHead>
+                <TableHead className='w-[180px]'>Trạng thái thanh toán</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -47,6 +48,9 @@ export default function TabHistory() {
                   <TableCell>{formatDate(ticket.departureTime)}</TableCell>
                   <TableCell>{formatDate(ticket.bookingDate)}</TableCell>
                   <TableCell className='text-red-600'>{formatMoney(Number(ticket.amount) * ticket.quantity)}</TableCell>
+                  <TableCell className='text-emerald-600'>
+                    {ticket.paymentStatus ? 'Đã thanh toán' : 'Chưa thanh toán'}
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>

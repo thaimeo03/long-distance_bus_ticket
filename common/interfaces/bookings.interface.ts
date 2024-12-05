@@ -43,6 +43,7 @@ export interface IBookingHistoryResponse {
   code: string
   quantity: number
   amount: string
+  paymentStatus: boolean
   seats: number[]
   pickupLocation: string
   dropOffLocation: string
