@@ -50,6 +50,7 @@ export interface IBookingHistoryResponse {
   departureTime: string
   busName: string
   bookingDate: string
+  email: string
 }
 
 export interface IBookingInfoResponse {
